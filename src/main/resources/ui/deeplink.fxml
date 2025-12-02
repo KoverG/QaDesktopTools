@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:id="root"
+            fx:controller="app.products.deeplink.DeepLinkController"
+            prefWidth="900" prefHeight="560"
+            styleClass="app-root">
+
+    <top>
+        <VBox spacing="10" styleClass="toolbar">
+
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Button text="← Назад" onAction="#goBack"  styleClass="chip-button"/>
+                <Button text="Меню"    onAction="#goHome"  styleClass="chip-button"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <!-- Айка как КНОПКА -->
+                <Button fx:id="btnHotkeys"
+                        styleClass="icon-btn"
+                        contentDisplay="GRAPHIC_ONLY"
+                        focusTraversable="false"/>
+            </HBox>
+
+            <VBox spacing="12" styleClass="workspace-card">
+
+                <!-- строка №1 — только ADB -->
+                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="ws-toolbar">
+                    <Label text="ADB path" styleClass="form-label"/>
+
+                    <HBox spacing="6" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                        <!-- Папка -->
+                        <Button fx:id="btnPickAdb"
+                                onAction="#onPickAdb"
+                                styleClass="icon-btn"/>
+
+                        <!-- Поле ADB -->
+                        <TextField fx:id="tfAdbPath"
+                                   promptText="C:\Android\Sdk\platform-tools\adb.exe"
+                                   styleClass="input-lg"
+                                   HBox.hgrow="ALWAYS"
+                                   minWidth="100"/>
+
+                        <!-- Редактирование ADB -->
+                        <Button fx:id="btnEditAdb"
+                                onAction="#onToggleAdbEdit"
+                                styleClass="icon-btn"/>
+                    </HBox>
+                </HBox>
+
+                <!-- строка №2 — Cfg List + deep link + сохранить -->
+                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="ws-toolbar">
+                    <Button text="Cfg List" onAction="#onOpenCfgList" styleClass="btn-tool-alt"/>
+                    <Label text="Deep link" styleClass="form-label"/>
+                    <HBox spacing="8" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                        <ComboBox fx:id="cbDeeplinks"
+                                  prefWidth="400"
+                                  styleClass="input-lg"/>
+                        <TextField fx:id="tfLink"
+                                   promptText="например: jaminvest://quotes"
+                                   styleClass="input-lg"
+                                   HBox.hgrow="ALWAYS"
+                                   prefWidth="270"
+                                   minWidth="60"/>
+                    </HBox>
+
+                    <Button fx:id="btnSaveDeeplink"
+                            text="Save to cfg"
+                            onAction="#onSaveDeeplink"/>
+                </HBox>
+
+                <HBox spacing="10" alignment="CENTER_RIGHT" styleClass="ws-toolbar">
+                    <HBox spacing="6" alignment="CENTER_LEFT">
+                        <CheckBox fx:id="chkDevice" styleClass="manual-checkbox"/>
+                        <Label styleClass="form-label" text="Девайс подключен к Android Studio"/>
+                    </HBox>
+                    <Button fx:id="btnApply" text="Apply" onAction="#onApply"/>
+                </HBox>
+
+            </VBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="8">
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <!-- переключатель консоли: SVG -->
+                <Button fx:id="btnConsoleToggle"
+                        onAction="#toggleConsole"
+                        styleClass="icon-btn">
+                    <HBox.margin><Insets right="4"/></HBox.margin>
+                </Button>
+                <Label fx:id="lblConsole" text="Консоль" styleClass="form-label"/>
+            </HBox>
+
+            <StackPane fx:id="consolePane">
+                <TextArea fx:id="taLog" prefRowCount="10" wrapText="true" styleClass="console"/>
+                <!-- корзина: SVG -->
+                <Button fx:id="btnClearLog"
+                        onAction="#onClearLog"
+                        styleClass="icon-btn"
+                        StackPane.alignment="TOP_RIGHT">
+                    <StackPane.margin><Insets top="10" right="16"/></StackPane.margin>
+                </Button>
+                <!-- вниз: SVG -->
+                <Button fx:id="btnScrollToBottom"
+                        onAction="#onScrollToBottom"
+                        styleClass="icon-btn"
+                        StackPane.alignment="BOTTOM_RIGHT"
+                        visible="false" managed="false">
+                    <StackPane.margin><Insets bottom="12" right="16"/></StackPane.margin>
+                </Button>
+            </StackPane>
+
+            <BorderPane.margin>
+                <Insets top="0" right="14" bottom="14" left="14"/>
+            </BorderPane.margin>
+        </VBox>
+    </center>
+
+</BorderPane>

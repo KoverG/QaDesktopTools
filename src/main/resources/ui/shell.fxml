@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="app.shell.ShellController"
+            fx:id="root"
+            styleClass="app-root">
+    <!-- ШАПКА -->
+    <top>
+        <VBox>
+            <HBox spacing="12" styleClass="app-header">
+                <Label fx:id="title" styleClass="app-title emboss"/>
+                <!-- Красный чип-акцент справа от заголовка -->
+                <Label text="beta" styleClass="accent-chip"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <!-- Заголовок конкретного экрана справа в шапке -->
+                <Label fx:id="lblHeaderScreen" styleClass="screen-title"/>
+            </HBox>
+            <!-- Тонкая акцентная линия под шапкой -->
+            <Pane styleClass="fheader-accent"/>
+        </VBox>
+    </top>
+
+
+    <!-- КОНТЕНТ (заменяется Router'ом) -->
+    <center>
+        <StackPane/>
+    </center>
+
+    <!-- НИЖНЯЯ ПАНЕЛЬ: слева версия, справа название текущего экрана -->
+    <bottom>
+        <VBox>
+            <Pane styleClass="ffooter-accent"/>
+            <HBox spacing="16" styleClass="footer">
+                <Label fx:id="lblVersion" styleClass="footer-left"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblScreenName" styleClass="footer-right"/>
+            </HBox>
+        </VBox>
+    </bottom>
+</BorderPane>

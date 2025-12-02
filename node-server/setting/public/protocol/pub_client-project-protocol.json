@@ -1,0 +1,22 @@
+{
+  "wrappers": {
+    "HelloMessage": {
+      "t": "CLIENT_HELLO_REQUEST"
+    },
+    "SubscribeMessage": {
+      "t": "CLIENT_SUBSCRIBE_REQUEST",
+      "p": {
+        "Instruments": [
+          "${INSTRUMENT_CODE}"
+        ]
+      }
+    },
+    "UnsubscribeMessage": {
+      "t": "CLIENT_UNSUBSCRIBE_REQUEST"
+    }
+  },
+
+  "paths": {
+    "Subscribe.instrument": "p.INSTRUMENT_FIELD"
+  }
+}

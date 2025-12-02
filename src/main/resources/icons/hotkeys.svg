@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 14 14">
+    <g transform="scale(0.88) translate(0.84,0.84)">
+        <path
+                fill="none"
+                stroke="#f50049"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="
+                M7 2.5
+                c2 0 3.5 1.5 3.5 3.5
+                S9 9.5 7 9.5
+                S3.5 8 3.5 6
+                S5 2.5 7 2.5
+
+                M5.2 10 H8.8
+
+                M7 13
+                m -0.55 0
+                a 0.55 0.55 0 1 0 1.1 0
+                a 0.55 0.55 0 1 0 -1.1 0
+            "
+        />
+    </g>
+</svg>

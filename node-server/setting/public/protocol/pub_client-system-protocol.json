@@ -1,0 +1,64 @@
+{
+  "wrappers": {
+    "ControlHello": {
+      "t": "ControlHello"
+    },
+    "GetStatus": {
+      "t": "GetStatus"
+    },
+    "GetConfig": {
+      "t": "GetConfig"
+    },
+    "SetScenario": {
+      "t": "SetScenario",
+      "scenario": "${scenario}"
+    },
+    "Control": {
+      "t": "Control",
+      "cmd": "${cmd}"
+    },
+    "ManualQuote": {
+      "t": "Control",
+      "cmd": "manualQuote",
+      "ops": "${ops}",
+      "replaceCurrent": "${replaceCurrent}"
+    }
+  },
+
+  "connectStartMessages": [
+    "hello",
+    "config.get",
+    "status.get"
+  ],
+
+  "out": {
+    "hello": {
+      "template": "ControlHello"
+    },
+    "status.get": {
+      "template": "GetStatus"
+    },
+    "config.get": {
+      "template": "GetConfig"
+    },
+    "control": {
+      "template": "Control",
+      "required": [
+        "cmd"
+      ]
+    },
+    "scenario.set": {
+      "template": "SetScenario",
+      "required": [
+        "scenario"
+      ]
+    },
+    "manual.quote": {
+      "template": "ManualQuote",
+      "required": [
+        "ops",
+        "replaceCurrent"
+      ]
+    }
+  }
+}

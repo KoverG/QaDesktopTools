@@ -1,0 +1,33 @@
+{
+  "wrappers": {
+    "hello": {
+      "t": "SERVER_HELLO_RESPONSE",
+      "p": {
+        "session": {
+          "field": "EXAMPLE_SESSION_ID"
+      }
+    },
+
+    "subscribe": {
+      "t": "SERVER_SUBSCRIBE_RESPONSE",
+      "p": {
+        "ob": [
+          {
+            "i": "INSTRUMENT_CODE",
+            "ask": [],
+            "bid": []
+          }
+        ]
+      }
+    },
+
+    "unsubscribe": {
+      "t": "SERVER_UNSUBSCRIBE_RESPONSE"
+    },
+
+    "quote": {
+      "t": "SERVER_QUOTE_RESPONSE",
+      "p": []
+    }
+  }
+}

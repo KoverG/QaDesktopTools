@@ -1,0 +1,44 @@
+‘айлы deeplink-конфига
+
+PRIVATE:
+  ѕуть: config/priv/deeplink/
+  ‘айлы:
+    - priv_cfgDeeplink.properties
+        Х –еальный путь к adb.exe на машине тестировщика/разработчика.
+        Х ‘ормат:
+            adb.path="C:\Users\<User>\AppData\Local\Android\Sdk\platform-tools\adb.exe"
+
+    - priv_list_deeplink.json
+        Х –еальный список диплинков, используемый в утилите DeepLinks.
+        Х ƒопустимые форматы:
+            1) ћассив строк:
+                 [
+                   "scheme://Path1",
+                   "scheme://Path2"
+                 ]
+
+            2) ќбъект с полем "deeplinks":
+                 {
+                   "deeplinks" : [
+                     "scheme://Path1",
+                     "scheme://Path2"
+                   ]
+                 }
+        Х DeepLinkController поддерживает оба варианта и выт€гивает строки
+          либо из корневого массива, либо из пол€ "deeplinks".
+
+
+PUBLIC (шаблоны):
+  ѕуть: config/pub/deeplink/
+  ‘айлы:
+    - pub_cfgDeeplink.properties
+        Х ѕример формата приватного файла priv_cfgDeeplink.properties.
+        Х Ќе содержит реальных путей, только пример.
+
+    - pub_list_deeplink.json
+        Х ѕример структуры priv_list_deeplink.json с условными диплинками.
+        Х ћожно использовать как заготовку при настройке приватной версии.
+
+Ќазначение:
+  Х ¬ приватной части (config/priv/...) лежат реальные значени€ дл€ использовани€ утилитой.
+  Х ¬ публичной части (config/pub/...) Ч только шаблоны и документаци€, без приватных данных.

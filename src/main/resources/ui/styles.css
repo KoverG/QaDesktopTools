@@ -1,0 +1,1165 @@
+/* =====================================================================
+/* 1) Глобальные токены темы (.root) — ТОЛЬКО переменные и базовая типографика.
+   НИКАКОГО фона здесь больше нет. */
+.root {
+    /* ---- Палитра фона приложения ---- */
+    -fx-bg-top:       #0b1430;
+    -fx-bg-bottom:    #0a1126;
+
+    /* ---- Базовые цвета текста ---- */
+    -fx-text-color:   #e6e9ef;
+    -fx-muted-color:  #aab1c2;
+
+    /* ---- Акцентная палитра ---- */
+    -fx-accent:           #7f1d1d;
+    -fx-accent-strong:    #f50049;
+    -fx-accent-soft:      rgba(153,27,27,0.30);
+
+    /* ---- Поверхности/плашки ---- */
+    -fx-surface:      rgba(255,255,255,0.06);
+    -fx-surface-2:    rgba(255,255,255,0.08);
+
+    /* ---- Специальные поверхности ---- */
+    -fx-console-bg:   rgba(255,255,255,0.07);
+
+    /* ---- Палитра состояний ---- */
+    -fx-success: #16a34a;
+    -fx-danger:  #dc2626;
+
+    /* ---- Базовая типографика ---- */
+    -fx-text-fill:   -fx-text-color;
+    -fx-font-family: Inter, "SF Pro Text", Arial, sans-serif;
+}
+
+/* Новый класс — фон только у главного корня приложения */
+.app-root {
+    -fx-background-color: linear-gradient(to bottom, -fx-bg-top, -fx-bg-bottom);
+    -fx-background-insets: 0;
+}
+
+
+/* =====================================================================
+  2) Базовые/общие правила и ресеты
+===================================================================== */
+
+/* 2A) Focus reset — отключаем стандартный синий фокус на базовых контролах */
+.button:focused,
+.toggle-button:focused,
+.hyperlink:focused,
+.combo-box-base:focused,
+.choice-box:focused {
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* 2B) Базовые общие правила
+   — курсор, базовая геометрия .button, сеточные отступы
+   ВАЖНО: здесь НЕ задаём ни фон, ни бордеры для .button,
+   чтобы не ломать спец-стили в последующих блоках.
+*/
+.button,
+.toggle-button,
+.hyperlink,
+.combo-box-base,
+.choice-box {
+    -fx-cursor: hand;
+}
+
+/* Базовая геометрия .button (как в исходнике) */
+.button {
+    -fx-background-radius: 12;
+    -fx-padding: 10 14;
+    -fx-font-weight: 600;
+}
+
+/* Глобальные радиусы на всём семействе контролов
+   (оставляем, как в исходнике; они идут НИЖЕ, чтобы приоритет был очевиден) */
+.button,
+.toggle-button,
+.hyperlink,
+.combo-box-base,
+.choice-box {
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+}
+
+/* Сеточная утилита */
+.grid { -fx-padding: 16; }
+
+/* 2C) Форменные подписи и разделители */
+.form-label {
+    -fx-text-fill: -fx-muted-color;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+.v-divider {
+    -fx-min-width: 1;
+    -fx-max-width: 1;
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-radius: 1;
+}
+
+
+/* =====================================================================
+  3) Каркас приложения: шапка, футер, герой-орбы
+===================================================================== */
+
+/* 3A) ШАПКА */
+.app-header {
+    -fx-padding: 0 20;
+    -fx-pref-height: 45px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-background-color: -fx-surface;
+    -fx-background-insets: 0; /* страховка, не меняет вид */
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 18, 0.25, 0, 3);
+}
+
+#title {
+    -fx-font-size: 25px;
+    -fx-font-weight: 900;
+    -fx-text-fill: -fx-text-color;
+    -fx-alignment: CENTER;
+    -fx-max-width: Infinity;
+}
+
+/* правый заголовок экрана в шапке */
+.screen-title {
+    -fx-text-fill: -fx-muted-color;
+    -fx-font-size: 13px;
+    -fx-font-weight: 800;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+/* «вдавленность» + читабельность */
+.emboss {
+    -fx-effect:
+            dropshadow(gaussian, rgba(0,0,0,0.70), 22, 0.35, 0, 4),
+            innershadow(gaussian, rgba(0,0,0,0.60), 8, 0.45, 0, 2),
+            innershadow(gaussian, rgba(255,255,255,0.10), 2, 0.40, 0, -2);
+}
+
+/* толстая красная линия под шапкой */
+.fheader-accent {
+    -fx-min-height: 4px;
+    -fx-max-height: 4px;
+    -fx-background-color: linear-gradient(to right, #f50049, rgba(153,27,27,0.0));
+    -fx-background-insets: 0; /* страховка */
+}
+
+.ffooter-accent {
+    -fx-min-height: 1px;
+    -fx-max-height: 1px;
+    -fx-background-color: linear-gradient(to right, #f50049, rgba(153,27,27,0.0));
+    -fx-background-insets: 0;
+}
+
+/* маленький красный чип */
+.accent-chip {
+    -fx-alignment: CENTER;
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: 800;
+    -fx-padding: 2 8;
+    -fx-background-radius: 999;
+    -fx-background-color: linear-gradient(to bottom, -fx-accent-strong, -fx-accent);
+    -fx-background-insets: 0; /* страховка */
+    -fx-effect: dropshadow(gaussian, rgba(153,27,27,0.45), 14, 0.35, 0, 2);
+}
+
+/* 3B) НИЖНЯЯ ПАНЕЛЬ (футер) */
+.footer {
+    -fx-padding: 8 16;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+.footer-left  { -fx-text-fill: -fx-muted-color; -fx-font-size: 12px; }
+.footer-right { -fx-text-fill: -fx-muted-color; -fx-font-size: 12px; }
+
+/* 3C) ГЕРОЙ-ОРБЫ И ПОДЗАГОЛОВОК */
+.hero-orb {
+    -fx-background-radius: 999;
+    -fx-background-insets: 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 30, 0.45, 0, 6);
+    -fx-opacity: 0.55;
+}
+.orb-red  { -fx-background-color: radial-gradient(center 35% 35%, radius 70%, rgba(153,27,27,0.50), rgba(153,27,27,0.0)); }
+.orb-blue { -fx-background-color: radial-gradient(center 65% 65%, radius 75%, rgba(59,130,246,0.35), rgba(59,130,246,0.0)); }
+
+/* подзаголовок «Выберите инструмент» */
+.hero-subtitle {
+    -fx-text-fill: -fx-muted-color;
+    -fx-font-size: 16px;
+    -fx-font-weight: 700;
+}
+
+
+/* =====================================================================
+  4) Карточки и рабочие области
+===================================================================== */
+
+/* 4A) Общая продуктовая карточка (.card) */
+.card {
+    -fx-background-color: -fx-surface-2;
+    -fx-background-insets: 0;       /* страховка от артефактов */
+    -fx-background-radius: 16;
+
+    -fx-padding: 14;
+    -fx-alignment: CENTER;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 16, 0.25, 0, 3);
+}
+
+/* 4B) Рабочее окно/баннер (.workspace-card) */
+.workspace-card {
+    -fx-background-color: -fx-surface-2;
+    -fx-background-insets: 0;
+    -fx-background-radius: 18;
+
+    -fx-padding: 14;
+    -fx-spacing: 12;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 18, 0.25, 0, 3);
+}
+
+/* 4C) Базовая компактная карточка (.subcard) */
+.subcard {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-background-insets: 0;
+    -fx-background-radius: 12;
+
+    -fx-padding: 10;
+}
+
+/* 4D) manual bid/ask поверх .subcard
+   — только палитры и бордеры; геометрия синхронизирована с .subcard */
+.manual-bid-card {
+    -fx-background-color: rgba(34,197,94,0.08);
+    -fx-background-insets: 0;
+    -fx-background-radius: 12;
+
+    -fx-border-color: rgba(34,197,94,0.45);
+    -fx-border-width: 1.5;
+    -fx-border-insets: 0;
+    -fx-border-radius: 12;
+
+    -fx-padding: 10; /* было в исходнике — оставляем */
+}
+
+.manual-ask-card {
+    -fx-background-color: rgba(239,68,68,0.08);
+    -fx-background-insets: 0;
+    -fx-background-radius: 12;
+
+    -fx-border-color: rgba(239,68,68,0.45);
+    -fx-border-width: 1.5;
+    -fx-border-insets: 0;
+    -fx-border-radius: 12;
+
+    -fx-padding: 10; /* было в исходнике — оставляем */
+}
+
+
+/* =====================================================================
+  5) Формы и инпуты
+===================================================================== */
+
+/* 5A) INPUT LARGE — поля ввода */
+.text-field.input-lg {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -fx-text-color;
+
+    -fx-background-color:
+            linear-gradient(from 0% 0% to 0% 100%, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.04) 100%);
+    -fx-background-insets: 0, 1;     /* как у тебя в исходнике */
+    -fx-background-radius: 12;
+
+    -fx-padding: 6 12;
+    -fx-min-height: 34px; -fx-pref-height: 34px; -fx-max-height: 34px;
+
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+}
+.text-field.input-lg:focused {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 12, 0.25, 0, 2);
+    -fx-border-color: rgba(255,255,255,0.16);
+}
+
+/* 5B) Лейбл-оверлей для TextField с троеточием */
+.input-ellipsis {
+    -fx-text-overrun: ellipsis;      /* троеточие в конце */
+    -fx-alignment: CENTER_LEFT;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 6 10 6 10;          /* подогнано под input-lg */
+    -fx-opacity: 0.95;
+    -fx-text-fill: -fx-text-color;
+    -fx-font-size: 13px;
+}
+
+/* 5C) Ручной ввод — размеры/баннер/«пилюли» */
+.manual-narrow { -fx-max-width: 300; } /* сужение блока ручного ввода */
+
+.manual-banner {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-background-insets: 0;
+    -fx-background-radius: 10;
+    -fx-padding: 10;
+}
+
+/* «Пилюли» Price/Volume — выключенные */
+.manual-pill-disabled {
+    -fx-opacity: 0.55;      /* визуально неактивные */
+    -fx-cursor: default;
+}
+
+/* Управление шириной полей Price/Volume */
+.manual-input {
+    -fx-min-width: 120;      /* было в исходнике */
+    -fx-pref-width: 160;
+    -fx-max-width: 220;      /* выбран эффективный финальный предел */
+}
+
+/* 5D) Чекбокс ручного ввода (кастомный) */
+.manual-checkbox .box {
+    -fx-background-color: rgba(255,255,255,0.08);
+    -fx-background-insets: 0;
+    -fx-background-radius: 4;
+
+    -fx-border-color: rgba(255,255,255,0.15);
+    -fx-border-radius: 4;
+    -fx-border-width: 1;
+
+    -fx-padding: 2;
+    -fx-min-width: 26px; -fx-min-height: 26px;
+    -fx-max-width: 26px; -fx-max-height: 26px;
+}
+.manual-checkbox:selected .box {
+    -fx-background-color: -fx-accent;
+    -fx-border-color: -fx-accent-strong;
+}
+.manual-checkbox .mark {
+    -fx-background-color: transparent;
+    -fx-shape: "M2,9 L6,13 L14,4 L15,5 L6,14 L1,10 Z";
+    -fx-scale-shape: false;
+}
+.manual-checkbox:selected .mark { -fx-background-color: white; }
+.manual-checkbox:hover .box { -fx-border-color: rgba(255,255,255,0.25); }
+.manual-checkbox:selected:hover .box {
+    -fx-background-color: -fx-accent-strong;
+    -fx-border-color: -fx-accent-strong;
+}
+
+
+/* =====================================================================
+  6) Комбобоксы (база/ячейки/popup)
+===================================================================== */
+
+/* 6A) База ComboBox в размере input-lg (закрытое состояние) */
+.combo-box-base.input-lg {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+
+    -fx-background-color: derive(-fx-bg-bottom, 8%);
+    -fx-background-insets: 0;
+    -fx-background-radius: 12;
+
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+
+    -fx-padding: 6 12;
+}
+/* текст в закрытом комбобоксе — как .form-label */
+.combo-box-base.input-lg > .list-cell {
+    -fx-text-fill: -fx-muted-color;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+/* Вариант для ручного ввода (база чуть светлее) */
+.combo-box-base.input-lg.manual-combo {
+    -fx-text-fill: -fx-text-color;            /* как в исходнике */
+    -fx-background-color: derive(-fx-bg-bottom, 12%);
+    -fx-background-insets: 0, 1;              /* сохранён твой стек */
+    -fx-background-radius: 12;
+
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+
+    -fx-padding: 6 12;
+}
+.combo-box-base.input-lg.manual-combo > .list-cell {
+    -fx-text-fill: -fx-muted-color;
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+/* 6B) Открытое состояние базы — нижние углы убираем */
+.combo-box-base:showing.input-lg {
+    -fx-background-radius: 12 12 0 0;
+    -fx-border-radius: 12 12 0 0;
+}
+.combo-box-base:showing.input-lg.manual-combo {
+    -fx-background-radius: 12 12 0 0;
+    -fx-border-radius: 12 12 0 0;
+}
+
+/* 6C) POPUP для всех ComboBox — единый источник правды
+   Взято из твоих исходных блоков (без изменений значений) */
+.combo-box-popup > .list-view {
+    -fx-background-color: #1b233b;            /* плотный тёмный */
+    -fx-background-insets: 0;
+    -fx-padding: 4 0;
+    -fx-background-radius: 0 0 12 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 16, 0.25, 0, 3);
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-width: 1;
+    -fx-border-radius: 0 0 12 12;
+}
+.combo-box-popup > .list-view .list-cell {
+    -fx-text-fill: -fx-text-color;
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-padding: 6 12;
+    -fx-background-color: transparent;
+    -fx-background-radius: 8;
+}
+.combo-box-popup > .list-view .list-cell:hover {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-background-radius: 8;
+}
+.combo-box-popup > .list-view .list-cell:selected {
+    -fx-background-color: rgba(153,27,27,0.35);
+    -fx-text-fill: white;
+    -fx-background-radius: 8;
+}
+
+/* Popup: скролл/viewport (перенесено из нижних дублей) */
+.combo-box-popup > .list-view .scroll-pane,
+.combo-box-popup > .list-view .scroll-pane .viewport {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+}
+.combo-box-popup > .list-view .scroll-bar {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+.combo-box-popup > .list-view .scroll-bar:vertical { -fx-pref-width: 10px; -fx-opacity: 1; }
+.combo-box-popup > .list-view .scroll-bar:horizontal{ -fx-pref-height: 10px; -fx-opacity: 1; }
+.combo-box-popup > .list-view .scroll-bar .track {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+}
+.combo-box-popup > .list-view .scroll-bar:vertical .thumb,
+.combo-box-popup > .list-view .scroll-bar:horizontal .thumb {
+    -fx-background-color: rgba(255,255,255,0.35);
+    -fx-background-insets: 0;
+    -fx-background-radius: 5px;
+    -fx-padding: 0;
+}
+.combo-box-popup > .list-view .scroll-bar .thumb:hover  { -fx-background-color: rgba(255,255,255,0.45); }
+.combo-box-popup > .list-view .scroll-bar .thumb:pressed{ -fx-background-color: rgba(255,255,255,0.55); }
+.combo-box-popup > .list-view .scroll-bar .increment-button,
+.combo-box-popup > .list-view .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-height: 0; -fx-min-height: 0; -fx-max-height: 0;
+    -fx-pref-width: 0;  -fx-min-width: 0;  -fx-max-width: 0;
+}
+.combo-box-popup > .list-view .scroll-bar .increment-arrow,
+.combo-box-popup > .list-view .scroll-bar .decrement-arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+
+/* =====================================================================
+  7) Кнопки (общие и вариации)
+===================================================================== */
+
+/* 7A) Компактные кнопки в стиле «chip» */
+.button.chip-button {
+    -fx-alignment: CENTER;
+    -fx-content-display: CENTER;
+    -fx-graphic-text-gap: 0;
+
+    -fx-padding: 2 8;
+    -fx-min-height: 25px; -fx-pref-height: 25px; -fx-max-height: 25px;
+
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-weight: 800;
+
+    -fx-background-radius: 999;
+    -fx-background-color: linear-gradient(to bottom, -fx-accent-strong, -fx-accent);
+    -fx-background-insets: 0; /* страховка */
+
+    -fx-border-color: transparent;
+
+    -fx-effect: dropshadow(gaussian, rgba(153,27,27,0.45), 14, 0.35, 0, 2);
+}
+.button.chip-button:hover  { -fx-opacity: 0.95; }
+.button.chip-button:pressed{ -fx-translate-y: 1; }
+
+/* 7B) Продуктовые большие кнопки */
+.button.product-button {
+    -fx-font-size: 16px;
+    -fx-font-weight: 800;
+    -fx-text-fill: white;
+
+    -fx-background-color: -fx-surface-2;
+    -fx-background-insets: 2;    /* как в исходнике */
+    -fx-background-radius: 12;
+
+    -fx-border-color: -fx-accent-strong;
+    -fx-border-width: 2;
+    -fx-border-radius: 14;
+    -fx-border-insets: 0;
+}
+.button.product-button:hover {
+    -fx-border-width: 1.5; /* как было */
+
+    -fx-background-color:
+            linear-gradient(from 0% 0% to 0% 100%, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.06) 100%),
+            radial-gradient(center 50% 50%, radius 100%, rgba(0,0,0,0.10), rgba(0,0,0,0.00)),
+            -fx-surface-2;
+    -fx-background-insets: 2, 2, 2;
+    -fx-background-radius:   12, 12, 12;
+}
+.button.product-button:pressed {
+    -fx-translate-y: 2;
+    -fx-border-width: 1.5;
+
+    -fx-background-color:
+            linear-gradient(from 0% 0% to 0% 100%, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.12) 100%),
+            radial-gradient(center 50% 50%, radius 100%, rgba(0,0,0,0.16), rgba(0,0,0,0.00)),
+            -fx-surface-2;
+    -fx-background-insets: 2, 2, 2;
+    -fx-background-radius:   12, 12, 12;
+}
+
+
+/* =====================================================================
+  8) Пульт / карточки управления
+===================================================================== */
+
+/* 8A) Контейнер и карточки пульта */
+.pult-flow {
+    -fx-hgap: 6;
+    -fx-vgap: 6;
+}
+
+.control-card {
+    -fx-padding: 8;
+
+    -fx-background-color: -fx-surface-2;
+    -fx-background-insets: 0;
+    -fx-background-radius: 14;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.30), 14, 0.22, 0, 2);
+}
+
+/* 8B) Чипы и базовые primary-кнопки внутри карточек */
+.control-chip {
+    -fx-font-size: 11px;
+    -fx-font-weight: 800;
+    -fx-text-fill: white;
+
+    -fx-background-color: linear-gradient(to bottom, -fx-accent-strong, -fx-accent);
+    -fx-background-insets: 0;
+    -fx-background-radius: 999;
+
+    -fx-padding: 3 10;
+
+    -fx-border-color: transparent;
+}
+.control-chip:hover { -fx-opacity: 0.95; }
+
+.control-card > .button.control-primary,
+.control-card .button.control-primary {
+    -fx-font-size: 12px;
+    -fx-font-weight: 900;
+    -fx-text-fill: white;
+
+    -fx-background-color: linear-gradient(to bottom, -fx-accent-strong, -fx-accent);
+    -fx-background-insets: 0;
+    -fx-background-radius: 12;
+
+    -fx-padding: 6 12;
+
+    -fx-border-color: transparent;
+
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.30), 14, 0.22, 0, 2);
+}
+
+/* одинаковая высота для control-primary и control-chip */
+.control-primary.same-height,
+.control-chip {
+    -fx-min-height: 30px;
+    -fx-pref-height: 30px;
+    -fx-max-height: 30px;
+}
+
+/* 8C) Единая ширина “плиток” пульта (по желанию) */
+.button.pult-chip { /* оставлено на будущее — как в исходнике */ }
+.pult-chip-same {
+    -fx-min-width: 64;
+    -fx-pref-width: 64;
+    -fx-max-width: 64;
+}
+
+/* 8D) Кнопки пульта: геометрия и палитры вариантов */
+.pult-scope .btn,
+.pult-scope .btn-base,
+.pult-scope .btn-base-strong,
+.pult-scope .btn-aggclear,
+.pult-scope .btn-aggfill,
+.pult-scope .btn-aggfill-strong {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+
+    -fx-padding: 6 12;
+    -fx-min-height: 32;
+    -fx-pref-height: 32;
+    -fx-max-height: 32;
+
+    -fx-font-weight: 800;
+    -fx-font-size: 12px;
+}
+
+/* ОЧИСТКА (красные варианты) */
+.pult-scope .btn-aggclear {
+    -fx-background-color: rgba(220,38,38,0.28);
+    -fx-text-fill: #fecaca;
+
+    -fx-border-color: rgba(220,38,38,0.48);
+    -fx-border-width: 1;
+}
+.pult-scope .btn-aggclear:hover {
+    -fx-background-color: rgba(220,38,38,0.36);
+}
+
+.pult-scope .btn-base-strong {
+    -fx-background-color: rgba(220,38,38,0.38);
+    -fx-text-fill: #ffe4e6;
+
+    -fx-border-color: rgba(220,38,38,0.60);
+    -fx-border-width: 1;
+}
+.pult-scope .btn-base-strong:hover {
+    -fx-background-color: rgba(220,38,38,0.46);
+}
+
+/* НАПОЛНЕНИЕ (бирюзовые варианты) */
+.pult-scope .btn-aggfill {
+    -fx-background-color: rgba(20,184,166,0.22);
+    -fx-text-fill: #d1fae5;
+
+    -fx-border-color: rgba(20,184,166,0.32);
+    -fx-border-width: 1;
+}
+.pult-scope .btn-aggfill:hover {
+    -fx-background-color: rgba(20,184,166,0.30);
+    -fx-text-fill: #ecfeff;
+}
+
+.pult-scope .btn-aggfill-strong {
+    -fx-background-color: rgba(20,184,166,0.34);
+    -fx-text-fill: #ecfeff;
+
+    -fx-border-color: rgba(20,184,166,0.48);
+    -fx-border-width: 1;
+}
+.pult-scope .btn-aggfill-strong:hover {
+    -fx-background-color: rgba(20,184,166,0.42);
+}
+
+/* 8E) Заголовочные кнопки секций пульта — визуал как у .ws-toolbar > .btn-tool-alt */
+.pult-scope .card-toggle {
+    -fx-background-color: #8f0027;      /* как .btn-tool-alt */
+    -fx-background-insets: 0;
+    -fx-background-radius: 10;
+
+    -fx-text-fill: white;
+
+    -fx-border-color: transparent;
+
+    -fx-padding: 0 14;
+    -fx-min-height: 34;
+    -fx-pref-height: 34;
+    -fx-max-height: 34;
+
+    -fx-font-weight: 800;
+    -fx-font-size: 13px;
+}
+
+.pult-scope .card-toggle:hover  { -fx-opacity: 0.95; }
+.pult-scope .card-toggle:pressed{ -fx-translate-y: 1; }
+
+
+/* =====================================================================
+  9) WebSocket toolbar
+===================================================================== */
+
+/* 9A) Контейнер тулбара */
+.toolbar {
+    -fx-padding: 14 16;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0; /* страховка */
+    -fx-effect: null;
+}
+
+/* 9B) Базовые кнопки тулбара */
+.ws-toolbar > .button {
+    -fx-background-color: -fx-surface-2;
+    -fx-background-insets: 0;
+    -fx-background-radius: 10;
+
+    -fx-text-fill: -fx-text-color;
+
+    -fx-border-color: transparent;
+
+    -fx-padding: 0 14;
+    -fx-min-height: 34;
+    -fx-pref-height: 34;
+    -fx-max-height: 34;
+
+    -fx-font-weight: 800;
+    -fx-font-size: 13px;
+
+    -fx-effect: null;
+    -fx-translate-y: 0;
+}
+
+/* Состояния подключения */
+.ws-toolbar > .ws-connect    { -fx-background-color: -fx-success; -fx-text-fill: white; }
+.ws-toolbar > .ws-disconnect { -fx-background-color: -fx-surface-2; -fx-text-fill: -fx-text-color; }
+
+/* Активные состояния (зелёная/красная) */
+.ws-toolbar > .btn-green-active { -fx-background-color: -fx-success; -fx-text-fill: white; }
+.ws-toolbar > .btn-red-active   { -fx-background-color: -fx-danger;  -fx-text-fill: white; }
+
+/* 9C) Визуально «приглушённые», но кликабельные */
+.ws-toolbar > .ws-inactive {
+    -fx-opacity: 0.55;
+    -fx-background-color: -fx-surface-2;
+    -fx-text-fill: -fx-muted-color;
+}
+.ws-toolbar > .ws-inactive:hover { -fx-opacity: 0.65; }
+
+/* 9D) Спокойные инструментальные кнопки */
+.ws-toolbar > .btn-tool {
+    -fx-background-color: -fx-surface-2;
+    -fx-background-insets: 0;
+    -fx-background-radius: 10;
+
+    -fx-text-fill: -fx-text-color;
+
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-width: 1;
+
+    -fx-padding: 0 14;
+    -fx-min-height: 34;
+    -fx-pref-height: 34;
+    -fx-max-height: 34;
+
+    -fx-font-weight: 800;
+    -fx-font-size: 13px;
+}
+.ws-toolbar > .btn-tool:hover  { -fx-background-color: rgba(255,255,255,0.08); }
+.ws-toolbar > .btn-tool:pressed{ -fx-translate-y: 1; }
+
+/* 9E) Альтернативные синие инструментальные */
+.ws-toolbar > .btn-tool-alt {
+    -fx-background-color: #8f0027;  /* синий */
+    -fx-background-insets: 0;
+    -fx-background-radius: 10;
+
+    -fx-text-fill: white;
+
+    -fx-border-color: transparent;
+
+    -fx-padding: 0 14;
+    -fx-min-height: 34;
+    -fx-pref-height: 34;
+    -fx-max-height: 34;
+
+    -fx-font-weight: 800;
+    -fx-font-size: 13px;
+}
+.ws-toolbar > .btn-tool-alt:hover  { -fx-opacity: 0.95; }
+.ws-toolbar > .btn-tool-alt:pressed{ -fx-translate-y: 1; }
+
+/* 9F) Фиксы ширин по ID */
+.ws-toolbar #btnServerToggle {
+    -fx-min-width: 105;
+    -fx-pref-width: 105;
+    -fx-max-width: 105;
+    -fx-alignment: CENTER;
+}
+.ws-toolbar #btnConnectToggle{
+    -fx-min-width: 105;
+    -fx-pref-width: 105;
+    -fx-max-width: 105;
+    -fx-alignment: CENTER;
+}
+
+
+/* =====================================================================
+  10) Консоль (TextArea)
+===================================================================== */
+
+/* 10A) Базовая оболочка консоли */
+.text-area.console {
+    -fx-background-color: -fx-console-bg;
+    -fx-background-insets: 0;
+    -fx-background-radius: 14;
+
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-width: 1;
+    -fx-border-radius: 14;
+
+    -fx-control-inner-background: transparent;
+
+    -fx-text-fill: #d1d5db;
+    -fx-highlight-fill: rgba(255,255,255,0.12);
+    -fx-highlight-text-fill: #e5e7eb;
+    -fx-caret-color: #e6e9ef;
+
+    -fx-font-family: "JetBrains Mono", "Cascadia Code", "Consolas", "Menlo", monospace;
+    -fx-font-size: 12px;
+
+    -fx-padding: 0;
+
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+.text-area.console:focused {
+    -fx-background-color: -fx-console-bg;
+    -fx-border-color: rgba(255,255,255,0.12);
+}
+
+/* 10B) Внутренности (контент/курсор) */
+.text-area.console .caret {
+    -fx-stroke: #e6e9ef;
+    -fx-stroke-width: 1;
+}
+.text-area.console .scroll-pane,
+.text-area.console .scroll-pane .viewport,
+.text-area.console .content,
+.text-area.console .corner {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 14;
+}
+.text-area.console .content {
+    -fx-padding: 12;
+}
+
+/* 10C) Скроллбар */
+.text-area.console .scroll-bar {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+.text-area.console .scroll-bar:vertical {
+    -fx-pref-width: 10px;
+    -fx-opacity: 1;
+}
+.text-area.console .scroll-bar:horizontal{
+    -fx-pref-height: 10px;
+    -fx-opacity: 1;
+}
+.text-area.console .scroll-bar .track {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+}
+.text-area.console .scroll-bar:vertical .thumb,
+.text-area.console .scroll-bar:horizontal .thumb {
+    -fx-background-color: rgba(255,255,255,0.35);
+    -fx-background-insets: 0;
+    -fx-background-radius: 5px;
+    -fx-padding: 0;
+}
+.text-area.console .scroll-bar .thumb:hover  { -fx-background-color: rgba(255,255,255,0.45); }
+.text-area.console .scroll-bar .thumb:pressed{ -fx-background-color: rgba(255,255,255,0.55); }
+
+.text-area.console .scroll-bar .increment-button,
+.text-area.console .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-height: 0; -fx-min-height: 0; -fx-max-height: 0;
+}
+.text-area.console .scroll-bar .increment-arrow,
+.text-area.console .scroll-bar .decrement-arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+.text-area.console .scroll-bar .corner {
+    -fx-background-color: transparent;
+}
+
+/* 10D) Скругления большого/малого края вертикального скролла */
+.text-area.console .scroll-bar:vertical .thumb.thumb-at-top    {
+    -fx-background-radius: 5 14 5 5;
+}
+.text-area.console .scroll-bar:vertical .thumb.thumb-at-bottom {
+    -fx-background-radius: 5 5 14 5;
+}
+.text-area.console .scroll-bar:vertical .thumb.thumb-at-top.thumb-at-bottom {
+    -fx-background-radius: 5 14 14 5;
+}
+
+
+
+
+/* =====================================================================
+  11) Иконки (текущее состояние — без изоляции SVG)
+===================================================================== */
+
+/* 11A) Старая круглая trash-кнопка (градиент + inner shadow) */
+.icon-trash {
+    -fx-min-width: 36px; -fx-min-height: 36px;
+    -fx-pref-width: 36px; -fx-pref-height: 36px;
+    -fx-max-width: 36px; -fx-max-height: 36px;
+
+    -fx-padding: 0;
+    -fx-alignment: center;
+    -fx-cursor: hand;
+
+    -fx-background-color: linear-gradient(#f4f4f4, #dcdcdc);
+    -fx-background-insets: 0;
+    -fx-background-radius: 50%;
+
+    -fx-text-fill: #555;
+    -fx-font-size: 20px;
+
+    -fx-effect: innershadow(gaussian, rgba(0,0,0,0.45), 8, 0.5, 0, 0);
+}
+.icon-trash:hover {
+    -fx-background-color: linear-gradient(#fafafa, #e8e8e8);
+    -fx-background-insets: 0;
+}
+
+/* 11B) Универсальная кнопка-иконка (рамка + ховеры) */
+.icon-btn {
+    -fx-padding: 0;
+
+    -fx-min-width: 28; -fx-min-height: 28;
+    -fx-pref-width: 28; -fx-pref-height: 28;
+
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 10;
+
+    -fx-border-color: -fx-surface-2;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+
+    -fx-cursor: hand;
+    -fx-content-display: graphic-only;
+    -fx-graphic-text-gap: 0;
+}
+.icon-btn:hover  { -fx-background-color: -fx-surface;   -fx-border-color: -fx-surface-2; }
+.icon-btn:pressed{ -fx-background-color: -fx-surface-2; -fx-border-color: -fx-surface-2; }
+.icon-btn:focused{ -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.25), 8, 0.15, 0, 0); }
+.icon-btn:disabled{ -fx-opacity: 0.55; -fx-effect: none; }
+
+/* размеры-утилиты */
+.icon-btn.sm {
+    -fx-min-width: 24; -fx-min-height: 24;
+    -fx-pref-width: 24; -fx-pref-height: 24;
+}
+.icon-btn.lg {
+    -fx-min-width: 32; -fx-min-height: 32;
+    -fx-pref-width: 32; -fx-pref-height: 32;
+}
+
+/* 11C) Кнопка выбора файла ADB (📁) — графика-only */
+.btn-file-pick,
+.ws-toolbar > .btn-file-pick {
+    -fx-min-width: 34; -fx-pref-width: 34; -fx-max-width: 34;
+    -fx-min-height: 34; -fx-pref-height: 34; -fx-max-height: 34;
+
+    -fx-padding: 0;
+    -fx-alignment: CENTER;
+
+    -fx-content-display: GRAPHIC_ONLY;
+    -fx-graphic-text-gap: 0;
+
+    -fx-background-color: -fx-surface-2;
+    -fx-background-insets: 0;
+    -fx-background-radius: 8;
+
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+
+    -fx-text-fill: -fx-text-color;
+    -fx-font-weight: 800;
+    -fx-font-size: 16px;
+
+    -fx-cursor: hand;
+    -fx-effect: null;
+
+    -fx-translate-y: 0;
+    -fx-opacity: 1.0;
+}
+.btn-file-pick:hover,
+.ws-toolbar > .btn-file-pick:hover {
+    -fx-background-color: rgba(255,255,255,0.08);
+}
+.btn-file-pick:pressed,
+.ws-toolbar > .btn-file-pick:pressed {
+    -fx-translate-y: 1;
+}
+
+/* 11D) Консольный тогглер (квадратная кнопка с рамкой) */
+.console-toggle {
+    -fx-min-width: 32; -fx-pref-width: 32; -fx-max-width: 32;
+    -fx-min-height: 28; -fx-pref-height: 28; -fx-max-height: 28;
+
+    -fx-padding: 0;
+
+    -fx-background-color: -fx-surface-2;
+    -fx-background-insets: 0;
+    -fx-background-radius: 8;
+
+    -fx-text-fill: -fx-text-color;
+
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-width: 1;
+    -fx-border-radius: 8;
+
+    -fx-font-weight: 800;
+    -fx-font-size: 13px;
+}
+.console-toggle:hover  { -fx-background-color: rgba(255,255,255,0.08); }
+.console-toggle:pressed{ -fx-translate-y: 1; }
+
+
+/* =====================================================================
+  12) Tooltip хоткеев
+===================================================================== */
+
+/* 12A) Контейнер тултипа (рамка как у icon-btn) */
+.hotkeys-tooltip {
+    -fx-background-color: rgba(11, 20, 48, 0.95); /* аналог -fx-bg-top */
+    -fx-background-insets: 0;
+    -fx-background-radius: 12;
+
+    -fx-border-color: rgba(255,255,255,0.18);
+    -fx-border-width: 1;
+    -fx-border-radius: 12;
+
+    -fx-padding: 16 20;
+
+    -fx-text-fill: #e6e9ef;            /* аналог -fx-text-color */
+    -fx-font-size: 13px;
+    -fx-font-family: Inter, "SF Pro Text", Arial, sans-serif;
+
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.6), 20, 0.25, 0, 8);
+    -fx-max-width: 480px;
+}
+
+/* 12B) Контент контейнера */
+.hotkeys-tooltip .content {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-text-fill: #e6e9ef;
+    -fx-font-size: 13px;
+    -fx-font-family: Inter, "SF Pro Text", Arial, sans-serif;
+    -fx-wrap-text: true;
+}
+
+/* 12C) Заголовок внутри тултипа */
+.hotkeys-tooltip .title {
+    -fx-text-fill: #e6e9ef;
+    -fx-font-size: 15px;
+    -fx-font-weight: 800;
+    -fx-padding: 0 0 8 0;
+}
+
+/* 12D) Группы и элементы списка хоткеев */
+.hotkeys-tooltip .hotkey-group {
+    -fx-padding: 8 0 0 0;
+    -fx-spacing: 4;
+}
+.hotkeys-tooltip .hotkey-item {
+    -fx-spacing: 8;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* 12E) «Клавиши» */
+.hotkeys-tooltip .key {
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: 800;
+
+    -fx-background-color: rgba(153, 27, 27, 0.8); /* аналог -fx-accent-strong */
+    -fx-background-insets: 0;
+    -fx-background-radius: 6;
+
+    -fx-padding: 2 6;
+    -fx-min-width: 20px;
+    -fx-alignment: CENTER;
+}
+
+/* 12F) Описания */
+.hotkeys-tooltip .description {
+    -fx-text-fill: #aab1c2;  /* аналог -fx-muted-color */
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+}
+
+/* 12G) Разделители */
+.hotkeys-tooltip .separator {
+    -fx-background-color: rgba(255,255,255,0.1);
+    -fx-background-insets: 0;
+    -fx-pref-height: 1;
+    -fx-padding: 6 0 4 0;
+}
+
+
+/* =====================================================================
+  13) Состояния ошибок (всегда в самом конце)
+===================================================================== */
+
+/* 13A) Инпуты в состоянии ошибки */
+.text-field:error,
+.text-field.input-lg:error {
+    -fx-border-color: #f50049;
+    -fx-border-width: 1;
+
+    -fx-border-radius: 12;          /* под геометрию input-lg */
+    -fx-background-insets: 0, 1;    /* как в базовом input-lg */
+
+    /* лёгкий подсвет бордера сверху контента */
+    -fx-effect: dropshadow(gaussian, rgba(245,0,73,0.45), 10, 0.35, 0, 0);
+}
+
+/* 13B) Кнопки в состоянии ошибки */
+.button:error,
+.button.chip-button:error,
+.icon-btn:error {
+    -fx-border-color: #f50049;
+    -fx-border-width: 2;
+
+    -fx-border-radius: 10;    /* под геометрию кнопок */
+    -fx-background-insets: 0; /* страховка от «двойных» инсет-слоёв */
+}
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="app.shell.HomeController"
+            styleClass="app-root">
+
+    <center>
+        <StackPane>
+            <VBox spacing="12" alignment="TOP_CENTER"
+                  StackPane.alignment="TOP_CENTER"
+                  style="-fx-padding: 28 0 0 0;">
+                <Label text="Выберите инструмент" styleClass="hero-subtitle"/>
+
+                <VBox spacing="12" alignment="CENTER">
+                    <Button text="WebSocket"
+                            onAction="#openWebSocket"
+                            prefWidth="260" prefHeight="56"
+                            styleClass="product-button"/>
+                    <Button text="DeepLinks"
+                            onAction="#openDeepLink"
+                            prefWidth="260" prefHeight="56"
+                            styleClass="product-button"/>
+                </VBox>
+            </VBox>
+        </StackPane>
+    </center>
+</BorderPane>

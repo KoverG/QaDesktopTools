@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.collections.FXCollections?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="app.products.websocket.WebSocketController"
+            prefWidth="900" prefHeight="560"
+            styleClass="app-root">
+
+    <top>
+        <VBox spacing="10" styleClass="toolbar">
+            <!-- Навигация -->
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Button text="← Назад" onAction="#goBack"  styleClass="chip-button"/>
+                <Button text="Меню"    onAction="#goHome"  styleClass="chip-button"/>
+            </HBox>
+
+            <!-- Рабочая панель -->
+            <VBox spacing="12" styleClass="workspace-card">
+                <!-- Тулбар -->
+                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="ws-toolbar">
+                    <Button fx:id="btnOpenConfig" text="Открыть конфиг" onAction="#onOpenConfig" styleClass="btn-tool-alt"/>
+
+                    <Label text="URL сервера" styleClass="form-label"/>
+                    <TextField fx:id="tfUrl"
+                               styleClass="input-lg"
+                               HBox.hgrow="ALWAYS"
+                               prefWidth="400"
+                               promptText="введите адрес сервера"/>
+
+                    <!-- сначала сервисные кнопки -->
+                    <Button fx:id="btnServerToggle"  text="Start server" onAction="#onToggleServer" />
+                    <Button fx:id="btnConnectToggle" text="Connect" onAction="#onToggleConnect" />
+
+                    <!-- spacer тянет всё, что правее, вправо -->
+                    <Pane HBox.hgrow="ALWAYS"/>
+
+                    <!-- и только потом "Кейсы" + Upd у правого края -->
+                    <Label text="Кейсы" styleClass="form-label"/>
+                    <ComboBox fx:id="cbScenario" onAction="#onScenarioChanged" styleClass="input-lg" prefWidth="180"/>
+                    <Button fx:id="btnSaveUpd" text="Upd" onAction="#onSaveUpd" styleClass="btn-tool-alt"/>
+                </HBox>
+
+                <!-- ===== ПУЛЬТ: три секции ===== -->
+                <HBox spacing="12" alignment="TOP_LEFT" styleClass="pult-scope">
+
+                    <!-- 1) Очистка стакана -->
+                    <VBox spacing="8">
+                        <Button fx:id="btnCardClean" text="Очистка стакана"
+                                onAction="#toggleCardClean" styleClass="card-toggle"/>
+                        <VBox fx:id="contentClean" spacing="10" styleClass="control-card" VBox.vgrow="ALWAYS">
+                            <GridPane hgap="10" vgap="10" VBox.vgrow="ALWAYS">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                                    <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                                </columnConstraints>
+
+                                <!-- Левая колонка -->
+                                <VBox GridPane.columnIndex="0" spacing="8" alignment="TOP_LEFT" VBox.vgrow="ALWAYS">
+                                    <Label text="Уровни стакана" styleClass="form-label"/>
+                                    <VBox spacing="6" styleClass="subcard">
+                                        <Label text="Bid" styleClass="form-label"/>
+                                        <HBox spacing="8">
+                                            <Button text="All" onAction="#onClearBid"      styleClass="btn-base-strong"/>
+                                            <Button text="Top" onAction="#onClearBidUp"    styleClass="btn-base-strong"/>
+                                            <Button text="Bot" onAction="#onClearBidDown"  styleClass="btn-base-strong"/>
+                                        </HBox>
+                                    </VBox>
+                                    <VBox spacing="6" styleClass="subcard">
+                                        <Label text="Ask" styleClass="form-label"/>
+                                        <HBox spacing="8">
+                                            <Button text="All" onAction="#onClearAsk"      styleClass="btn-aggclear"/>
+                                            <Button text="Top" onAction="#onClearAskUp"    styleClass="btn-aggclear"/>
+                                            <Button text="Bot" onAction="#onClearAskDown"  styleClass="btn-aggclear"/>
+                                        </HBox>
+                                    </VBox>
+                                    <VBox spacing="6" styleClass="subcard">
+                                        <Label text="Bid_Ask" styleClass="form-label"/>
+                                        <HBox spacing="8">
+                                            <Button text="All" onAction="#onClearAll"        styleClass="btn-base-strong"/>
+                                            <Button text="Top" onAction="#onClearBothUp"     styleClass="btn-base-strong"/>
+                                            <Button text="Bot" onAction="#onClearBothDown"   styleClass="btn-base-strong"/>
+                                        </HBox>
+                                    </VBox>
+                                </VBox>
+
+                                <!-- Правая колонка -->
+                                <VBox GridPane.columnIndex="1" spacing="8" alignment="TOP_LEFT" VBox.vgrow="ALWAYS">
+                                    <Label text="Агрегация" styleClass="form-label"/>
+                                    <VBox spacing="6" styleClass="subcard">
+                                        <Label text="Agg Bid" styleClass="form-label"/>
+                                        <HBox spacing="8">
+                                            <Button text="All" onAction="#onAggClearBidAll"  styleClass="btn-aggclear"/>
+                                            <Button text="Top" onAction="#onAggClearBidTop"  styleClass="btn-aggclear"/>
+                                            <Button text="Bot" onAction="#onAggClearBidBot"  styleClass="btn-aggclear"/>
+                                        </HBox>
+                                    </VBox>
+                                    <VBox spacing="6" styleClass="subcard">
+                                        <Label text="Agg Ask" styleClass="form-label"/>
+                                        <HBox spacing="8">
+                                            <Button text="All" onAction="#onAggClearAskAll"  styleClass="btn-aggclear"/>
+                                            <Button text="Top" onAction="#onAggClearAskTop"  styleClass="btn-aggclear"/>
+                                            <Button text="Bot" onAction="#onAggClearAskBot"  styleClass="btn-aggclear"/>
+                                        </HBox>
+                                    </VBox>
+                                    <VBox spacing="6" styleClass="subcard">
+                                        <Label text="Agg Bid_Ask" styleClass="form-label"/>
+                                        <HBox spacing="8">
+                                            <Button text="All" onAction="#onAggClearBothAll" styleClass="btn-aggclear"/>
+                                            <Button text="Top" onAction="#onAggClearBothTop" styleClass="btn-aggclear"/>
+                                            <Button text="Bot" onAction="#onAggClearBothBot" styleClass="btn-aggclear"/>
+                                        </HBox>
+                                    </VBox>
+                                </VBox>
+                            </GridPane>
+                        </VBox>
+                    </VBox>
+
+                    <!-- 2) Наполнение стакана -->
+                    <VBox spacing="8">
+                        <Button fx:id="btnCardFill" text="Наполнение стакана"
+                                onAction="#toggleCardFill" styleClass="card-toggle"/>
+                        <VBox fx:id="contentFill" spacing="10" styleClass="control-card" VBox.vgrow="ALWAYS">
+                            <GridPane hgap="10" vgap="10" VBox.vgrow="ALWAYS">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                                    <ColumnConstraints percentWidth="50" hgrow="ALWAYS"/>
+                                </columnConstraints>
+
+                                <!-- Левая колонка -->
+                                <VBox GridPane.columnIndex="0" spacing="8" alignment="TOP_LEFT" VBox.vgrow="ALWAYS">
+                                    <Label text="Уровни стакана" styleClass="form-label"/>
+                                    <VBox spacing="6" styleClass="subcard">
+                                        <Label text="Bid" styleClass="form-label"/>
+                                        <HBox spacing="8">
+                                            <Button text="Top" onAction="#onBidUp"     styleClass="btn-aggfill-strong"/>
+                                            <Button text="Bot" onAction="#onBidDown"   styleClass="btn-aggfill-strong"/>
+                                        </HBox>
+                                    </VBox>
+                                    <VBox spacing="6" styleClass="subcard">
+                                        <Label text="Ask" styleClass="form-label"/>
+                                        <HBox spacing="8">
+                                            <Button text="Top" onAction="#onAskUp"     styleClass="btn-aggfill-strong"/>
+                                            <Button text="Bot" onAction="#onAskDown"   styleClass="btn-aggfill-strong"/>
+                                        </HBox>
+                                    </VBox>
+                                    <VBox spacing="6" styleClass="subcard">
+                                        <Label text="Bid_Ask" styleClass="form-label"/>
+                                        <HBox spacing="8">
+                                            <Button text="Top" onAction="#onBothUp"    styleClass="btn-aggfill-strong"/>
+                                            <Button text="Bot" onAction="#onBothDown"  styleClass="btn-aggfill-strong"/>
+                                        </HBox>
+                                    </VBox>
+
+                                    <!-- Сервис -->
+                                    <VBox spacing="6" styleClass="subcard">
+                                        <Label text="Наполнение из Cfg" styleClass="form-label"/>
+                                        <HBox spacing="8">
+                                            <Button text="Q_Sub"  onAction="#onAddBoth"  styleClass="btn-aggfill-strong"/>
+                                            <Button text="Q_Quot" onAction="#onOneShot"  styleClass="btn-aggfill-strong"/>
+                                        </HBox>
+                                    </VBox>
+                                </VBox>
+
+                                <!-- Правая колонка -->
+                                <VBox GridPane.columnIndex="1" spacing="8" alignment="TOP_LEFT" VBox.vgrow="ALWAYS">
+                                    <Label text="Агрегация" styleClass="form-label"/>
+                                    <VBox spacing="6" styleClass="subcard">
+                                        <Label text="Agg Bid" styleClass="form-label"/>
+                                        <HBox spacing="8">
+                                            <Button text="All" onAction="#onAggFillBidAll"   styleClass="btn-aggfill"/>
+                                            <Button text="Top" onAction="#onAggFillBidUp"    styleClass="btn-aggfill"/>
+                                            <Button text="Bot" onAction="#onAggFillBidDown"  styleClass="btn-aggfill"/>
+                                        </HBox>
+                                    </VBox>
+                                    <VBox spacing="6" styleClass="subcard">
+                                        <Label text="Agg Ask" styleClass="form-label"/>
+                                        <HBox spacing="8">
+                                            <Button text="All" onAction="#onAggFillAskAll"   styleClass="btn-aggfill"/>
+                                            <Button text="Top" onAction="#onAggFillAskUp"    styleClass="btn-aggfill"/>
+                                            <Button text="Bot" onAction="#onAggFillAskDown"  styleClass="btn-aggfill"/>
+                                        </HBox>
+                                    </VBox>
+                                    <VBox spacing="6" styleClass="subcard">
+                                        <Label text="Agg Bid_Ask" styleClass="form-label"/>
+                                        <HBox spacing="8">
+                                            <Button text="All" onAction="#onAggFillBothAll"  styleClass="btn-aggfill"/>
+                                            <Button text="Top" onAction="#onAggFillBothUp"   styleClass="btn-aggfill"/>
+                                            <Button text="Bot" onAction="#onAggFillBothDown" styleClass="btn-aggfill"/>
+                                        </HBox>
+                                    </VBox>
+                                </VBox>
+                            </GridPane>
+                        </VBox>
+                    </VBox>
+
+                    <!-- 3) Ручной ввод -->
+                    <VBox spacing="8" HBox.hgrow="NEVER" styleClass="manual-narrow">
+                        <Button fx:id="btnCardManual" text="Ручной ввод"
+                                onAction="#toggleCardManual" styleClass="card-toggle"/>
+
+                        <VBox fx:id="contentManual" spacing="10" styleClass="control-card" VBox.vgrow="ALWAYS">
+
+                            <!-- Верхняя строка -->
+                            <HBox spacing="4" alignment="CENTER_LEFT">
+                                <Label text="Тип заявки" styleClass="form-label"/>
+                                <ComboBox fx:id="cbManualSide"
+                                          promptText="Выберите тип"
+                                          onAction="#onManualSideChanged"
+                                          prefWidth="160"
+                                          styleClass="input-lg"/>
+                                <Pane HBox.hgrow="ALWAYS"/>
+                            </HBox>
+
+                            <!-- Чекбокс -->
+                            <HBox spacing="0" alignment="CENTER_LEFT">
+                                <CheckBox fx:id="chkEditCurrentLevel" styleClass="manual-checkbox"/>
+                                <Label styleClass="form-label" text="Заменять значение в текущем уровне">
+                                    <HBox.margin>
+                                        <Insets left="0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </HBox>
+
+                            <!-- Блок для Bid -->
+                            <VBox fx:id="blockBid" spacing="6" visible="false" managed="false">
+                                <Label text="Bid" styleClass="form-label"/>
+                                <VBox spacing="6" styleClass="manual-bid-card">
+                                    <HBox spacing="8">
+                                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                            <Label text="Price" styleClass="form-label"/>
+                                            <TextField fx:id="tfBidPrice" styleClass="input-lg" promptText="Цена заявки"/>
+                                        </VBox>
+                                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                            <Label text="Volume" styleClass="form-label"/>
+                                            <TextField fx:id="tfBidVolume" styleClass="input-lg" promptText="Объем заявки"/>
+                                        </VBox>
+                                    </HBox>
+                                </VBox>
+                            </VBox>
+
+                            <!-- Блок для Ask -->
+                            <VBox fx:id="blockAsk" spacing="6" visible="false" managed="false">
+                                <Label text="Ask" styleClass="form-label"/>
+                                <VBox spacing="6" styleClass="manual-ask-card">
+                                    <HBox spacing="8">
+                                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                            <Label text="Price" styleClass="form-label"/>
+                                            <TextField fx:id="tfAskPrice" styleClass="input-lg" promptText="Цена заявки"/>
+                                        </VBox>
+                                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                            <Label text="Volume" styleClass="form-label"/>
+                                            <TextField fx:id="tfAskVolume" styleClass="input-lg" promptText="Объем заявки"/>
+                                        </VBox>
+                                    </HBox>
+                                </VBox>
+                            </VBox>
+
+                            <!-- Нижняя панель: Send -->
+                            <HBox spacing="8" alignment="CENTER_RIGHT" styleClass="ws-toolbar">
+                                <Pane HBox.hgrow="ALWAYS"/>
+                                <Button fx:id="btnManualSend"
+                                        text="Send"
+                                        onAction="#onManualSend"
+                                        visible="false" managed="false"/>
+                            </HBox>
+
+                        </VBox>
+                    </VBox>
+
+                </HBox>
+            </VBox>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="8">
+            <!-- Заголовок консоли -->
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Button fx:id="btnConsoleToggle"
+                        onAction="#toggleConsole"
+                        styleClass="icon-btn">
+                    <HBox.margin><Insets right="4"/></HBox.margin>
+                </Button>
+                <Label fx:id="lblConsole" text="Консоль" styleClass="form-label"/>
+            </HBox>
+
+            <!-- Обёртка консоли и икон-кнопок -->
+            <StackPane fx:id="consolePane">
+                <TextArea fx:id="taLog" prefRowCount="10" wrapText="true" styleClass="console"/>
+
+                <!-- очистка лога (SVG) -->
+                <Button fx:id="btnClearLog"
+                        onAction="#onClearLog"
+                        styleClass="icon-btn">
+                    <StackPane.margin>
+                        <Insets top="10" right="16"/>
+                    </StackPane.margin>
+                    <StackPane.alignment>TOP_RIGHT</StackPane.alignment>
+                </Button>
+
+                <!-- прокрутка вниз (SVG) -->
+                <Button fx:id="btnScrollToBottom"
+                        onAction="#onScrollLogToBottom"
+                        styleClass="icon-btn"
+                        visible="false" managed="false">
+                    <StackPane.margin>
+                        <Insets bottom="12" right="16"/>
+                    </StackPane.margin>
+                    <StackPane.alignment>BOTTOM_RIGHT</StackPane.alignment>
+                </Button>
+            </StackPane>
+
+            <BorderPane.margin>
+                <Insets top="0" right="14" bottom="14" left="14"/>
+            </BorderPane.margin>
+        </VBox>
+    </center>
+
+
+</BorderPane>

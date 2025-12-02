@@ -1,0 +1,7 @@
+{
+  "deeplinks": [
+    "app://Operations",
+    "app://Settings",
+    "app://Search"
+  ]
+}

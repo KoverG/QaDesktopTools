@@ -1,0 +1,37 @@
+{
+  "url": "ws://localhost:8080",
+  "urlControlPath": "/control",
+  "urlControlParams": {
+    "control": "1"
+  },
+  "zeroFlash": true,
+  "instrumentSource": "client",
+  "current_scenario": "default",
+  "scenarios": {
+    "default": {
+      "bid": true,
+      "ask": true
+    },
+    "bid-only": {
+      "bid": true,
+      "ask": false
+    },
+    "ask-only": {
+      "bid": false,
+      "ask": true
+    },
+    "none": {
+      "bid": false,
+      "ask": false
+    },
+    "upd": {
+      "bid": true,
+      "ask": true
+    }
+  },
+  "heartbeat": {
+    "interval_ms": 30000,
+    "timeout_ms": 15000
+  },
+  "controlUrl": "ws://localhost:8080/control?control=1"
+}
