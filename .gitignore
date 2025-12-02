@@ -49,3 +49,9 @@ node-server/setting/private/
 # Node.js dependencies (must be ignored)
 node-server/node_modules/
 **/node_modules/
+
+# IntelliJ project files
+.idea/
+
+# Node bundle packer script (local only)
+pack-src.js
