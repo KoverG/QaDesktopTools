@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/23"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="app.products.websocketmanual.WebSocketManualController"
+            prefWidth="900" prefHeight="560"
+            styleClass="app-root">
+
+    <!-- ===== ВЕРХНЯЯ ПАНЕЛЬ: навигация + рабочий тулбар ============= -->
+    <top>
+        <VBox spacing="10" styleClass="toolbar">
+
+            <!-- Навигация (как в WebSocket.fxml) -->
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Button text="← Назад" onAction="#goBack"  styleClass="chip-button"/>
+                <Button text="Меню"    onAction="#goHome"  styleClass="chip-button"/>
+            </HBox>
+
+            <!-- Рабочая панель WebSocket Manual -->
+            <VBox spacing="12" styleClass="workspace-card">
+
+                <HBox spacing="10" alignment="CENTER_LEFT" styleClass="ws-toolbar">
+
+                    <Button fx:id="btnOpenConfig"
+                            text="Открыть конфиг"
+                            onAction="#onOpenConfig"
+                            styleClass="btn-tool-alt"/>
+
+                    <Label text="URL сервера" styleClass="form-label"/>
+
+                    <TextField fx:id="txtUrl"
+                               styleClass="input-lg"
+                               HBox.hgrow="ALWAYS"
+                               prefWidth="400"
+                               promptText="ws://localhost:8080/control"/>
+
+                    <Button fx:id="btnUrlEdit"
+                            onAction="#onToggleUrlEdit"
+                            styleClass="icon-btn"/>
+
+                    <Button fx:id="btnServerToggle"
+                            text="Start server"
+                            onAction="#onToggleServer"/>
+
+                    <Button fx:id="btnConnectToggle"
+                            text="Connect"
+                            onAction="#onToggleConnect"/>
+
+                    <Pane HBox.hgrow="ALWAYS"/>
+
+                    <Label text="Клиентов" styleClass="form-label"/>
+
+                    <Button fx:id="btnClientCount"
+                            text="0"
+                            onAction="#onShowClients"
+                            styleClass="chip-button"/>
+
+                </HBox>
+
+            </VBox>
+        </VBox>
+    </top>
+
+    <!-- =============== ЦЕНТР: две панели =========================== -->
+    <center>
+        <VBox spacing="8" styleClass="workspace-card">
+
+            <!-- Заголовки -->
+            <HBox spacing="8">
+                <Label text="Сообщения клиентов" styleClass="form-label"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Label text="Ответ сервера" styleClass="form-label"/>
+            </HBox>
+
+            <!-- SplitPane с кастомным классом manual-split -->
+            <SplitPane dividerPositions="0.5"
+                       VBox.vgrow="ALWAYS"
+                       styleClass="manual-split">
+                <items>
+
+                    <!-- ===================== ЛЕВАЯ ПАНЕЛЬ ====================== -->
+                    <VBox spacing="6" styleClass="inner-card" VBox.vgrow="ALWAYS">
+
+                        <ComboBox fx:id="cbClientLeft"
+                                  promptText="Выбор клиента"
+                                  styleClass="input-lg"
+                                  HBox.hgrow="ALWAYS"
+                                  maxWidth="Infinity">
+                            <tooltip><Tooltip text="Всем клиентам"/></tooltip>
+                        </ComboBox>
+
+                        <StackPane fx:id="incomingPane" VBox.vgrow="ALWAYS">
+
+                            <ListView fx:id="listIncoming"
+                                      styleClass="console"
+                                      VBox.vgrow="ALWAYS"/>
+
+                            <Button fx:id="btnScrollIncoming"
+                                    onAction="#onScrollIncomingToBottom"
+                                    styleClass="icon-btn"
+                                    visible="false" managed="false">
+                                <StackPane.margin>
+                                    <Insets bottom="8" right="16"/>
+                                </StackPane.margin>
+                                <StackPane.alignment>BOTTOM_RIGHT</StackPane.alignment>
+                            </Button>
+
+                        </StackPane>
+
+                    </VBox>
+
+                    <!-- ===================== ПРАВАЯ ПАНЕЛЬ ====================== -->
+                    <VBox spacing="6" styleClass="inner-card" VBox.vgrow="ALWAYS">
+
+                        <!-- ===== ШАБЛОНЫ ===== -->
+                        <HBox spacing="8" alignment="CENTER_LEFT" styleClass="ws-toolbar">
+
+                            <Label text="Шаблоны" styleClass="form-label"/>
+
+                            <ComboBox fx:id="cbTemplates"
+                                      promptText="Список шаблонов"
+                                      styleClass="input-lg"
+                                      HBox.hgrow="ALWAYS"
+                                      maxWidth="Infinity"/>
+
+                            <Button fx:id="btnOpenTemplates"
+                                    text="Открыть шаблоны"
+                                    onAction="#onOpenTemplates"
+                                    styleClass="btn-tool-alt"/>
+
+                        </HBox>
+
+                        <!-- ===== Исходящее сообщение + кнопки ===== -->
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+                            <Label text="Исходящее сообщение" styleClass="form-label"/>
+
+                            <ComboBox fx:id="cbClient"
+                                      promptText="Выбор клиента"
+                                      styleClass="input-lg"
+                                      HBox.hgrow="ALWAYS"
+                                      maxWidth="Infinity">
+                                <tooltip><Tooltip text="Всем клиентам"/></tooltip>
+                            </ComboBox>
+
+                            <Button fx:id="btnSend"
+                                    text="Отправить"
+                                    onAction="#onSend"
+                                    styleClass="btn-send-main">
+                                <HBox.margin><Insets left="8"/></HBox.margin>
+                            </Button>
+
+                            <Pane HBox.hgrow="ALWAYS"/>
+
+                            <Button fx:id="btnClearOutgoing"
+                                    onAction="#onClearOutgoing"
+                                    styleClass="icon-btn">
+                                <HBox.margin><Insets right="4"/></HBox.margin>
+                            </Button>
+
+                            <Button fx:id="btnCollapseOutgoing"
+                                    onAction="#onToggleOutgoingCollapse"
+                                    styleClass="icon-btn">
+                                <HBox.margin><Insets right="0"/></HBox.margin>
+                            </Button>
+
+                        </HBox>
+
+                        <!-- ===== РЕДАКТОР JSON ===== -->
+                        <StackPane fx:id="outgoingPane">
+
+                            <TextArea fx:id="txtOutgoing"
+                                      styleClass="manual-json"
+                                      promptText="{ &quot;t&quot;: &quot;ExampleResp&quot;, &quot;p&quot;: { ... } }"
+                                      VBox.vgrow="NEVER"
+                                      wrapText="true"/>
+
+                            <Button fx:id="btnScrollOutgoing"
+                                    onAction="#onScrollOutgoingToBottom"
+                                    styleClass="icon-btn"
+                                    visible="false" managed="false">
+                                <StackPane.margin>
+                                    <Insets bottom="8" right="16"/>
+                                </StackPane.margin>
+                                <StackPane.alignment>BOTTOM_RIGHT</StackPane.alignment>
+                            </Button>
+
+                        </StackPane>
+
+                        <!-- ===== ЛОГ ИСХОДЯЩИХ СООБЩЕНИЙ ===== -->
+                        <StackPane fx:id="outgoingLogPane" VBox.vgrow="ALWAYS">
+
+                            <ListView fx:id="listOutgoingLog"
+                                      styleClass="console"
+                                      VBox.vgrow="ALWAYS"/>
+
+                            <Button fx:id="btnScrollOutgoingLog"
+                                    onAction="#onScrollOutgoingLogToBottom"
+                                    styleClass="icon-btn"
+                                    visible="false" managed="false">
+                                <StackPane.margin>
+                                    <Insets bottom="8" right="16"/>
+                                </StackPane.margin>
+                                <StackPane.alignment>BOTTOM_RIGHT</StackPane.alignment>
+                            </Button>
+
+                        </StackPane>
+
+                    </VBox>
+
+                </items>
+            </SplitPane>
+
+            <BorderPane.margin>
+                <Insets top="0" right="14" bottom="14" left="14"/>
+            </BorderPane.margin>
+        </VBox>
+    </center>
+
+
+    <!-- ===== НИЗ: консоль как в WebSocket.fxml ===================== -->
+    <bottom>
+        <VBox spacing="8">
+
+            <HBox alignment="CENTER_LEFT" spacing="8">
+                <Button fx:id="btnConsoleToggle"
+                        onAction="#toggleConsole"
+                        styleClass="icon-btn">
+                    <HBox.margin><Insets right="4"/></HBox.margin>
+                </Button>
+                <Label fx:id="lblConsole" text="Консоль" styleClass="form-label"/>
+            </HBox>
+
+            <StackPane fx:id="consolePane">
+
+                <TextArea fx:id="taLog"
+                          prefRowCount="6"
+                          wrapText="true"
+                          styleClass="console"/>
+
+                <Button fx:id="btnClearLog"
+                        onAction="#onClearLog"
+                        styleClass="icon-btn">
+                    <StackPane.margin><Insets top="10" right="16"/></StackPane.margin>
+                    <StackPane.alignment>TOP_RIGHT</StackPane.alignment>
+                </Button>
+
+                <Button fx:id="btnScrollToBottom"
+                        onAction="#onScrollLogToBottom"
+                        styleClass="icon-btn"
+                        visible="false" managed="false">
+                    <StackPane.margin><Insets bottom="12" right="16"/></StackPane.margin>
+                    <StackPane.alignment>BOTTOM_RIGHT</StackPane.alignment>
+                </Button>
+
+            </StackPane>
+
+            <BorderPane.margin>
+                <Insets top="0" right="14" bottom="14" left="14"/>
+            </BorderPane.margin>
+
+        </VBox>
+    </bottom>
+
+</BorderPane>

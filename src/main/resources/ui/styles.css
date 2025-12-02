@@ -813,13 +813,45 @@
     -fx-alignment: CENTER;
 }
 
+/* 9G) Кнопка отправки в WebSocketManual (как btn-tool-alt, но без ws-toolbar) */
+.btn-send-main {
+    -fx-background-color: #8f0027;
+    -fx-background-insets: 0;
+    -fx-background-radius: 10;
+
+    -fx-text-fill: white;
+
+    -fx-border-color: transparent;
+
+    -fx-padding: 0 14;
+    -fx-min-height: 34;
+    -fx-pref-height: 34;
+    -fx-max-height: 34;
+
+    -fx-font-weight: 800;
+    -fx-font-size: 13px;
+}
+
+.btn-send-main:hover {
+    -fx-opacity: 0.95;
+}
+
+.btn-send-main:pressed {
+    -fx-translate-y: 1;
+}
+
+/* чуть приглушаем, когда отключена (пустое поле) */
+.btn-send-main:disabled {
+    -fx-opacity: 0.4;
+}
+
 
 /* =====================================================================
-  10) Консоль (TextArea)
+  10) Консоль (TextArea + ListView с классом .console)
 ===================================================================== */
 
-/* 10A) Базовая оболочка консоли */
-.text-area.console {
+/* 10A) Базовая оболочка консоли / лог-панели */
+.console {
     -fx-background-color: -fx-console-bg;
     -fx-background-insets: 0;
     -fx-background-radius: 14;
@@ -843,86 +875,113 @@
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
 }
-.text-area.console:focused {
+.console:focused {
     -fx-background-color: -fx-console-bg;
     -fx-border-color: rgba(255,255,255,0.12);
 }
 
-/* 10B) Внутренности (контент/курсор) */
-.text-area.console .caret {
+/* 10B) Внутренности (контент/курсор) для TextArea */
+.console .caret {
     -fx-stroke: #e6e9ef;
     -fx-stroke-width: 1;
 }
-.text-area.console .scroll-pane,
-.text-area.console .scroll-pane .viewport,
-.text-area.console .content,
-.text-area.console .corner {
+.console .scroll-pane,
+.console .scroll-pane .viewport,
+.console .content,
+.console .corner {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-background-radius: 14;
 }
-.text-area.console .content {
+.console .content {
     -fx-padding: 12;
 }
 
 /* 10C) Скроллбар */
-.text-area.console .scroll-bar {
+.console .scroll-bar {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-padding: 0;
 }
-.text-area.console .scroll-bar:vertical {
+.console .scroll-bar:vertical {
     -fx-pref-width: 10px;
     -fx-opacity: 1;
 }
-.text-area.console .scroll-bar:horizontal{
+.console .scroll-bar:horizontal{
     -fx-pref-height: 10px;
     -fx-opacity: 1;
 }
-.text-area.console .scroll-bar .track {
+.console .scroll-bar .track {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-background-radius: 0;
     -fx-padding: 0;
     -fx-border-color: transparent;
 }
-.text-area.console .scroll-bar:vertical .thumb,
-.text-area.console .scroll-bar:horizontal .thumb {
+.console .scroll-bar:vertical .thumb,
+.console .scroll-bar:horizontal .thumb {
     -fx-background-color: rgba(255,255,255,0.35);
     -fx-background-insets: 0;
     -fx-background-radius: 5px;
     -fx-padding: 0;
 }
-.text-area.console .scroll-bar .thumb:hover  { -fx-background-color: rgba(255,255,255,0.45); }
-.text-area.console .scroll-bar .thumb:pressed{ -fx-background-color: rgba(255,255,255,0.55); }
+.console .scroll-bar .thumb:hover  { -fx-background-color: rgba(255,255,255,0.45); }
+.console .scroll-bar .thumb:pressed{ -fx-background-color: rgba(255,255,255,0.55); }
 
-.text-area.console .scroll-bar .increment-button,
-.text-area.console .scroll-bar .decrement-button {
+.console .scroll-bar .increment-button,
+.console .scroll-bar .decrement-button {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
     -fx-padding: 0;
     -fx-pref-height: 0; -fx-min-height: 0; -fx-max-height: 0;
 }
-.text-area.console .scroll-bar .increment-arrow,
-.text-area.console .scroll-bar .decrement-arrow {
+.console .scroll-bar .increment-arrow,
+.console .scroll-bar .decrement-arrow {
     -fx-shape: "";
     -fx-padding: 0;
     -fx-background-color: transparent;
 }
-.text-area.console .scroll-bar .corner {
+.console .scroll-bar .corner {
     -fx-background-color: transparent;
 }
 
 /* 10D) Скругления большого/малого края вертикального скролла */
-.text-area.console .scroll-bar:vertical .thumb.thumb-at-top    {
+.console .scroll-bar:vertical .thumb.thumb-at-top    {
     -fx-background-radius: 5 14 5 5;
 }
-.text-area.console .scroll-bar:vertical .thumb.thumb-at-bottom {
+.console .scroll-bar:vertical .thumb.thumb-at-bottom {
     -fx-background-radius: 5 5 14 5;
 }
-.text-area.console .scroll-bar:vertical .thumb.thumb-at-top.thumb-at-bottom {
+.console .scroll-bar:vertical .thumb.thumb-at-top.thumb-at-bottom {
     -fx-background-radius: 5 14 14 5;
 }
+
+/* 10E) ListView с классом .console (левая панель WebSocket Manual) */
+.list-view.console .virtual-flow,
+.list-view.console .clipped-container,
+.list-view.console .sheet,
+.list-view.console .corner {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 14;
+}
+
+.list-view.console .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #d1d5db;
+    -fx-padding: 4 10 4 10;
+}
+
+.list-view.console .list-cell:filled:selected,
+.list-view.console .list-cell:filled:selected:hover {
+    -fx-background-color: rgba(255,255,255,0.10);
+    -fx-text-fill: #e5e7eb;
+}
+
+.list-view.console .list-cell:filled:hover {
+    -fx-background-color: rgba(255,255,255,0.06);
+}
+
 
 
 
@@ -1134,12 +1193,189 @@
     -fx-padding: 6 0 4 0;
 }
 
-
 /* =====================================================================
-  13) Состояния ошибок (всегда в самом конце)
+  13) Модальные окна
 ===================================================================== */
 
-/* 13A) Инпуты в состоянии ошибки */
+.app-dialog {
+    -fx-background-color: -app-surface;
+    -fx-padding: 16;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 12, 0.15, 0, 4);
+}
+
+/* =====================================================================
+  14) Панели сокета
+===================================================================== */
+/* 14A) Стили панелей */
+.inner-card {
+    /* фон явно отличаем от workspace-card,
+       чтобы граница и скругление были видны */
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-background-insets: 0;
+    -fx-background-radius: 10;
+
+    -fx-border-color: rgba(255,255,255,0.18);
+    -fx-border-width: 1;
+    -fx-border-insets: 0;
+    -fx-border-radius: 10;
+
+    -fx-padding: 10;
+}
+
+/* SplitPane конкретно в WebSocket Manual (класс manual-split) */
+.split-pane.manual-split {
+    -fx-background-color: transparent;
+}
+
+/* Полностью прозрачный укороченный разделитель */
+.split-pane.manual-split:horizontal > .split-pane-divider {
+    -fx-background-color: transparent;
+
+    /* укорачиваем по высоте под скругления панелей */
+    -fx-background-insets: 10 0 10 0;
+
+    /* зона захвата (толщина разделителя) */
+    -fx-padding: 0 2 0 2;
+
+    /* без скруглений */
+    -fx-background-radius: 0;
+}
+
+/* Убираем hover и pressed — оставляем пустыми */
+.split-pane.manual-split:horizontal > .split-pane-divider:hover,
+.split-pane.manual-split:horizontal > .split-pane-divider:pressed {
+    -fx-background-color: transparent;
+}
+
+
+
+
+
+
+/* 14B) Стили консоли в панели */
+/* WebSocket Manual: поле исходящего JSON */
+.text-area.manual-json {
+    /* Принудительный цвет фона — как у приложения */
+    -fx-background-color: #0b1430;               /* ВНЕШНИЙ ФОН */
+    -fx-control-inner-background: #0b1430;       /* ВНУТРЕННИЙ ФОН */
+
+    -fx-background-insets: 0;
+    -fx-background-radius: 10;
+
+    -fx-border-color: rgba(255,255,255,0.18);
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+
+    -fx-text-fill: -fx-text-color;
+    -fx-highlight-fill: rgba(255,255,255,0.12);
+    -fx-highlight-text-fill: #e5e7eb;
+    -fx-caret-color: #e6e9ef;
+
+    /* 🔹 цвет плейсхолдера (promptText) */
+    -fx-prompt-text-fill: rgba(255,255,255,0.45);
+
+    -fx-padding: 2 4 2 4;
+
+    -fx-focus-color: #f50049;
+    -fx-faint-focus-color: transparent;
+}
+
+.text-area.manual-json:focused {
+    -fx-border-color: #f50049;
+}
+
+/* Внутренние слои тоже должны иметь фон приложения */
+.text-area.manual-json .scroll-pane,
+.text-area.manual-json .scroll-pane .viewport,
+.text-area.manual-json .content,
+.text-area.manual-json .corner {
+    -fx-background-color: #0b1430;
+    -fx-background-insets: 0;
+    -fx-background-radius: 10;
+}
+
+.text-area.manual-json .content {
+    -fx-padding: 4 6 4 6;
+}
+
+/* Скроллбар manual-json — как у консоли */
+.text-area.manual-json .scroll-bar {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.text-area.manual-json .scroll-bar:vertical {
+    -fx-pref-width: 10px;
+    -fx-opacity: 1;
+}
+
+.text-area.manual-json .scroll-bar:horizontal {
+    -fx-pref-height: 10px;
+    -fx-opacity: 1;
+}
+
+.text-area.manual-json .scroll-bar .track {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+}
+
+.text-area.manual-json .scroll-bar:vertical .thumb,
+.text-area.manual-json .scroll-bar:horizontal .thumb {
+    -fx-background-color: rgba(255,255,255,0.35);
+    -fx-background-insets: 0;
+    -fx-background-radius: 5px;
+    -fx-padding: 0;
+}
+
+.text-area.manual-json .scroll-bar .thumb:hover  { -fx-background-color: rgba(255,255,255,0.45); }
+.text-area.manual-json .scroll-bar .thumb:pressed{ -fx-background-color: rgba(255,255,255,0.55); }
+
+.text-area.manual-json .scroll-bar .increment-button,
+.text-area.manual-json .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-pref-height: 0; -fx-min-height: 0; -fx-max-height: 0;
+    -fx-pref-width: 0;  -fx-min-width: 0;  -fx-max-width: 0;
+}
+
+.text-area.manual-json .scroll-bar .increment-arrow,
+.text-area.manual-json .scroll-bar .decrement-arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+/* Скругления большого/малого края вертикального скролла — через ScrollThumbRounding */
+.text-area.manual-json .scroll-bar:vertical .thumb.thumb-at-top {
+    -fx-background-radius: 5 14 5 5;
+}
+
+.text-area.manual-json .scroll-bar:vertical .thumb.thumb-at-bottom {
+    -fx-background-radius: 5 5 14 5;
+}
+
+.text-area.manual-json .scroll-bar:vertical .thumb.thumb-at-top.thumb-at-bottom {
+    -fx-background-radius: 5 14 14 5;
+}
+
+
+
+
+
+
+
+/* =====================================================================
+  15) Состояния ошибок (всегда в самом конце)
+===================================================================== */
+
+/* 15A) Инпуты в состоянии ошибки */
 .text-field:error,
 .text-field.input-lg:error {
     -fx-border-color: #f50049;
@@ -1152,7 +1388,7 @@
     -fx-effect: dropshadow(gaussian, rgba(245,0,73,0.45), 10, 0.35, 0, 0);
 }
 
-/* 13B) Кнопки в состоянии ошибки */
+/* 15B) Кнопки в состоянии ошибки */
 .button:error,
 .button.chip-button:error,
 .icon-btn:error {

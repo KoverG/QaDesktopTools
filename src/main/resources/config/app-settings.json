@@ -1,0 +1,11 @@
+{
+  "WebSocket": {},
+  "WebSocketManual": {
+    "outgoing": {
+      "prefRowCountExpanded": 6,
+      "prefRowCountCollapsed": 1,
+      "startCollapsed": false
+    }
+  },
+  "DeepLink": {}
+}

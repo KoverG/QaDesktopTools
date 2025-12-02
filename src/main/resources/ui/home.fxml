@@ -19,6 +19,10 @@
                             onAction="#openWebSocket"
                             prefWidth="260" prefHeight="56"
                             styleClass="product-button"/>
+                    <Button text="WebSocket Manual"
+                            onAction="#openWebSocketManual"
+                            prefWidth="260" prefHeight="56"
+                            styleClass="product-button"/>
                     <Button text="DeepLinks"
                             onAction="#openDeepLink"
                             prefWidth="260" prefHeight="56"
