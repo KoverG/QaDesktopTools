@@ -54,9 +54,11 @@
                     <Label text="Клиентов" styleClass="form-label"/>
 
                     <Button fx:id="btnClientCount"
-                            text="0"
-                            onAction="#onShowClients"
-                            styleClass="chip-button"/>
+                            styleClass="chip-button chip-indicator"
+                            focusTraversable="false"
+                            onAction="#noop"
+                            minWidth="28" maxWidth="28"
+                            minHeight="28" maxHeight="28"/>
 
                 </HBox>
 
@@ -84,13 +86,19 @@
                     <!-- ===================== ЛЕВАЯ ПАНЕЛЬ ====================== -->
                     <VBox spacing="6" styleClass="inner-card" VBox.vgrow="ALWAYS">
 
-                        <ComboBox fx:id="cbClientLeft"
-                                  promptText="Выбор клиента"
-                                  styleClass="input-lg"
-                                  HBox.hgrow="ALWAYS"
-                                  maxWidth="Infinity">
-                            <tooltip><Tooltip text="Всем клиентам"/></tooltip>
-                        </ComboBox>
+                        <!-- строка: Клиент + комбобокс -->
+                        <HBox spacing="8" alignment="CENTER_LEFT">
+
+                            <Label text="Клиент:" styleClass="form-label"/>
+
+                            <ComboBox fx:id="cbClientLeft"
+                                      promptText="Выбор клиента"
+                                      styleClass="input-lg"
+                                      HBox.hgrow="ALWAYS"
+                                      maxWidth="Infinity">
+                            </ComboBox>
+
+                        </HBox>
 
                         <StackPane fx:id="incomingPane" VBox.vgrow="ALWAYS">
 
@@ -124,35 +132,61 @@
                                       promptText="Список шаблонов"
                                       styleClass="input-lg"
                                       HBox.hgrow="ALWAYS"
+                                      minWidth="20"
                                       maxWidth="Infinity"/>
 
                             <Button fx:id="btnOpenTemplates"
-                                    text="Открыть шаблоны"
                                     onAction="#onOpenTemplates"
-                                    styleClass="btn-tool-alt"/>
+                                    styleClass="icon-btn"
+                                    pickOnBounds="true"/>
 
                         </HBox>
 
+
+
                         <!-- ===== Исходящее сообщение + кнопки ===== -->
-                        <HBox spacing="8" alignment="CENTER_LEFT">
+                        <HBox spacing="2" alignment="CENTER_LEFT">
                             <Label text="Исходящее сообщение" styleClass="form-label"/>
 
                             <ComboBox fx:id="cbClient"
                                       promptText="Выбор клиента"
                                       styleClass="input-lg"
-                                      HBox.hgrow="ALWAYS"
-                                      maxWidth="Infinity">
-                                <tooltip><Tooltip text="Всем клиентам"/></tooltip>
+                                      HBox.hgrow="NEVER"
+                                      minWidth="50" prefWidth="162" maxWidth="162">
+                                <HBox.margin><Insets left="4"/></HBox.margin>
                             </ComboBox>
+
+                            <!-- НОВОЕ: отправка всем клиентам -->
+                            <CheckBox fx:id="chkSendToAll"
+                                      styleClass="manual-checkbox">
+                                <tooltip><Tooltip text="Отправлять всем клиентам"/></tooltip>
+                                <HBox.margin><Insets left="4"/></HBox.margin>
+                            </CheckBox>
 
                             <Button fx:id="btnSend"
                                     text="Отправить"
                                     onAction="#onSend"
                                     styleClass="btn-send-main">
-                                <HBox.margin><Insets left="8"/></HBox.margin>
+                                <HBox.margin><Insets left="4"/></HBox.margin>
+                            </Button>
+
+                            <Button fx:id="btnSendPing"
+                                    onAction="#onSendPing"
+                                    styleClass="icon-btn">
+                                <tooltip>
+                                    <Tooltip text="Отправить Ping"/>
+                                </tooltip>
+                                <HBox.margin><Insets right="4"/></HBox.margin>
                             </Button>
 
                             <Pane HBox.hgrow="ALWAYS"/>
+
+                            <Button fx:id="btnSaveTemplate"
+                                    onAction="#onSaveTemplate"
+                                    styleClass="icon-btn">
+                                <tooltip><Tooltip text="Сохранить в шаблоны"/></tooltip>
+                                <HBox.margin><Insets right="4"/></HBox.margin>
+                            </Button>
 
                             <Button fx:id="btnClearOutgoing"
                                     onAction="#onClearOutgoing"
@@ -165,6 +199,7 @@
                                     styleClass="icon-btn">
                                 <HBox.margin><Insets right="0"/></HBox.margin>
                             </Button>
+
 
                         </HBox>
 

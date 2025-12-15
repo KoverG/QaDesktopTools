@@ -28,6 +28,10 @@ import java.util.concurrent.TimeUnit;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.net.Socket;
+
+import app.core.node.NodeServerLauncher;
+import app.core.node.AppShutdown;
 
 public class WebSocketController {
 
@@ -207,8 +211,6 @@ public class WebSocketController {
         append("[DEBUG] initialize() done]");
     }
 
-
-
     private void resetSessionState() {
         lastScenarioPrinted = null;
         setScenarioSentOnce = false;
@@ -219,7 +221,6 @@ public class WebSocketController {
         scenarioInitInProgress = false;
         append("[DEBUG] resetSessionState()");
     }
-
 
     // ===== Загрузка сценариев из локального setting.json =====
     private void loadScenariosFromLocalConfig() {
@@ -260,7 +261,6 @@ public class WebSocketController {
             append("Не удалось загрузить сценарии из setting.json: " + e.getMessage());
         }
     }
-
 
     // Собирает полный control URL из url + urlControlPath + urlControlParams
     private String buildControlUrlFromConfig(JsonNode n) {
@@ -309,7 +309,6 @@ public class WebSocketController {
         return url;
     }
 
-
     private String resolveDefaultUrl() {
         try {
             if (Files.exists(messagesConfigPath)) {
@@ -341,7 +340,6 @@ public class WebSocketController {
         // По умолчанию сразу как control-сокет
         return "ws://localhost:8080/control?control=1";
     }
-
 
     private void persistControlUrl(String raw) {
         String url = raw == null ? "" : raw.trim();
@@ -434,15 +432,121 @@ public class WebSocketController {
         }
     }
 
-
     private String configuredServerName() { return resolveConfiguredUrlForLog(); }
+
+    // ===== Проверка порта и запуск с ожиданием =====
+
+    private boolean isPortInUse(int port) {
+        try (Socket socket = new Socket("localhost", port)) {
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    private int resolveControlPort() {
+        String url = null;
+        if (tfUrl != null) {
+            url = tfUrl.getText();
+        }
+        if (url == null || url.isBlank()) {
+            url = resolveConfiguredUrlForLog();
+        }
+
+        try {
+            URI uri = URI.create(url);
+            int port = uri.getPort();
+            if (port > 0) {
+                return port;
+            }
+            // Если порт не указан явно — по умолчанию 8080 (наш локальный стенд)
+            return 8080;
+        } catch (Exception e) {
+            return 8080;
+        }
+    }
+
+    /**
+     * Асинхронно:
+     * 1) гасит все зарегистрированные Node-сервера через AppShutdown.runAll();
+     * 2) ждёт, пока control-порт освободится;
+     * 3) стартует node.startIfNeeded(), если порт свободен.
+     */
+    private void startExchangeServerWithPortWait() {
+        if (btnServerToggle != null) {
+            btnServerToggle.setDisable(true);
+        }
+
+        final int port = resolveControlPort();
+
+        Thread t = new Thread(() -> {
+            final int maxAttempts = 40;    // ~4 секунды при шаге 100 мс
+            final long sleepMs    = 100L;
+
+            // 1) Гасим все наши Node-процессы
+            try {
+                append("[DEBUG] startExchangeServerWithPortWait(): calling AppShutdown.runAll()");
+                AppShutdown.runAll();
+            } catch (Exception e) {
+                append("[DEBUG] AppShutdown.runAll() failed: " + e.getMessage());
+            }
+
+            // 2) Ждём, пока порт освободится
+            boolean portFree = false;
+            for (int i = 0; i < maxAttempts; i++) {
+                if (!isPortInUse(port)) {
+                    portFree = true;
+                    break;
+                }
+                try {
+                    Thread.sleep(sleepMs);
+                } catch (InterruptedException ignored) {
+                    break;
+                }
+            }
+            final boolean finalPortFree = portFree;
+
+            // 3) Возвращаемся в FX-поток и либо стартуем сервер, либо пишем WARN
+            Platform.runLater(() -> {
+                try {
+                    if (finalPortFree) {
+                        append("[DEBUG] control port " + port + " is free, starting node...");
+                        persistControlUrl(tfUrl.getText());
+                        node.startIfNeeded();
+                        append("Локальный сервер " + resolveConfiguredUrlForLog() + " запущен.");
+                    } else {
+                        append("[WARN] Порт " + port + " так и не освободился. " +
+                                "Скорее всего, его занимает внешний процесс или другой WebSocket-сервер. " +
+                                "Остановите его вручную и попробуйте ещё раз.");
+                    }
+                } catch (Exception e) {
+                    append("Ошибка запуска сервера: " + e.getMessage());
+                    showBanner("Ошибка запуска сервера: " + e.getMessage());
+                } finally {
+                    if (btnServerToggle != null) {
+                        btnServerToggle.setDisable(false);
+                    }
+                    updateServerToggleText();
+                    updateServerButtonsVisual();
+                    append("[DEBUG] startExchangeServerWithPortWait(): done");
+                }
+            });
+        }, "ws-exchange-server-port-wait");
+
+        t.setDaemon(true);
+        t.start();
+    }
 
     @FXML
     public void onToggleServer() {
         try {
             if (node.isRunning()) {
+                // ===== ВЕТКА "Server Off" =====
                 append("[DEBUG] onToggleServer(): stopping...");
-                fx(() -> { btnServerToggle.setDisable(true); btnServerToggle.setText("Start server"); });
+                fx(() -> {
+                    btnServerToggle.setDisable(true);
+                    btnServerToggle.setText("Start server");
+                });
 
                 CompletableFuture<Void> closeFuture = CompletableFuture.completedFuture(null);
                 if (client != null && client.isOpen()) {
@@ -458,7 +562,8 @@ public class WebSocketController {
                         updateConnectToggleText();
                     });
                     try {
-                        node.stopIfRunning();
+                        // Гасим все Node-сервера централизованно
+                        AppShutdown.runAll();
                         fx(() -> append("Локальный сервер остановлен."));
                     } catch (Exception e) {
                         fx(() -> {
@@ -475,15 +580,10 @@ public class WebSocketController {
                     }
                 });
             } else {
-                append("[DEBUG] onToggleServer(): starting...");
-                persistControlUrl(tfUrl.getText());
-                node.startIfNeeded();
-                fx(() -> {
-                    append("Локальный сервер " + resolveConfiguredUrlForLog() + " запущен.");
-                    updateServerToggleText();
-                    updateServerButtonsVisual();
-                });
-                append("[DEBUG] onToggleServer(): start complete");
+                // ===== ВЕТКА "Start server" =====
+                append("[DEBUG] onToggleServer(): starting (async with port wait)...");
+                // Стартуем асинхронный процесс: AppShutdown + ожидание порта + node.startIfNeeded()
+                startExchangeServerWithPortWait();
             }
         } catch (Exception e) {
             fx(() -> {
@@ -668,7 +768,6 @@ public class WebSocketController {
 
             boolean replaceCurrent = (chkEditCurrentLevel != null && chkEditCurrentLevel.isSelected());
 
-            // Используем новый метод sendManualQuote если доступен
             if (ops.isEmpty()) {
                 showBanner("Нет данных для отправки");
                 return;
@@ -744,7 +843,6 @@ public class WebSocketController {
         append("Кейс изменен на " + desired);
         updateConnectToggleText();
     }
-
 
     // ====== Кнопка Upd → серверу: сохранить текущий стакан как SubscribeResp_upd ======
     @FXML
@@ -829,11 +927,6 @@ public class WebSocketController {
         }
         return null;
     }
-
-
-
-
-
 
     @FXML public void toggleCardClean()  { toggleCard(contentClean); }
     @FXML public void toggleCardFill()   { toggleCard(contentFill); }
@@ -966,8 +1059,6 @@ public class WebSocketController {
         });
     }
 
-
-
     private void showBanner(String text) {
         if (lbBanner != null) { lbBanner.setText(text); lbBanner.setVisible(true); lbBanner.setManaged(true); }
     }
@@ -1061,7 +1152,6 @@ public class WebSocketController {
         } catch (Exception ignore) { }
         return "ws://localhost:8080/control?control=1";
     }
-
 
     private void showManualModeNone() {
         setNodeVisible(blockBid, false);
