@@ -55,3 +55,6 @@ node-server/node_modules/
 
 # Node bundle packer script (local only)
 pack-src.js
+
+node-server-manual/clients.json
+node-server-manual/log/
