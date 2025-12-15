@@ -510,6 +510,36 @@
 .button.chip-button:hover  { -fx-opacity: 0.95; }
 .button.chip-button:pressed{ -fx-translate-y: 1; }
 
+/* 7A-2) Chip-indicator: chip-button без "кнопочных" эффектов */
+
+
+.button.chip-button.chip-indicator {
+    -fx-cursor: default; /* не рука */
+    -fx-padding: 0 8 0 8;
+}
+
+/* отключаем любые визуальные реакции на hover/pressed/focus */
+.button.chip-button.chip-indicator:hover {
+    -fx-opacity: 1;          /* перебиваем chip-button:hover */
+}
+
+.button.chip-button.chip-indicator:pressed {
+    -fx-translate-y: 0;      /* перебиваем chip-button:pressed */
+}
+
+.button.chip-button.chip-indicator:focused,
+.button.chip-button.chip-indicator:armed {
+    -fx-effect: dropshadow(gaussian, rgba(153,27,27,0.45), 14, 0.35, 0, 2); /* как в обычном chip */
+}
+
+/* Текст числа внутри графики индикатора клиентов */
+.chip-indicator-label {
+    -fx-text-fill: -fx-text-color; /* или нужный цвет */
+    -fx-font-size: 12px;
+    -fx-font-weight: 700;
+}
+
+
 /* 7B) Продуктовые большие кнопки */
 .button.product-button {
     -fx-font-size: 16px;
@@ -1048,7 +1078,39 @@
     -fx-pref-width: 32; -fx-pref-height: 32;
 }
 
-/* 11C) Кнопка выбора файла ADB (📁) — графика-only */
+/*11C) Ping-кнопка*/
+/* Ping — через ID, чтобы не перебивалось ничем */
+
+#btnSendPing.icon-btn {
+    -fx-min-width: 32;
+    -fx-min-height: 32;
+    -fx-pref-width: 32;
+    -fx-pref-height: 32;
+    -fx-border-color: rgba(245, 0, 73, 0.75);
+    -fx-border-radius: 12; /* если хочешь чуть больше скругление */
+}
+
+
+#btnSendPing.icon-btn:hover  {
+    -fx-border-color: #f50049;
+    -fx-background-color: rgba(245, 0, 73, 0.10);
+}
+
+#btnSendPing.icon-btn:pressed{
+    -fx-border-color: #f50049;
+    -fx-background-color: rgba(245, 0, 73, 0.18);
+}
+
+/* ВАЖНО: если хочешь, чтобы даже в disabled было “красноватое” — убери сброс */
+#btnSendPing.icon-btn:disabled{
+    -fx-opacity: 0.55;
+    -fx-border-color: rgba(245, 0, 73, 0.20);
+    -fx-background-color: transparent;
+}
+
+
+
+/* 11D) Кнопка выбора файла ADB (📁) — графика-only */
 .btn-file-pick,
 .ws-toolbar > .btn-file-pick {
     -fx-min-width: 34; -fx-pref-width: 34; -fx-max-width: 34;
@@ -1087,7 +1149,7 @@
     -fx-translate-y: 1;
 }
 
-/* 11D) Консольный тогглер (квадратная кнопка с рамкой) */
+/* 11E) Консольный тогглер (квадратная кнопка с рамкой) */
 .console-toggle {
     -fx-min-width: 32; -fx-pref-width: 32; -fx-max-width: 32;
     -fx-min-height: 28; -fx-pref-height: 28; -fx-max-height: 28;

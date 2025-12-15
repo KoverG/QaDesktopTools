@@ -1,5 +1,7 @@
+// FILE: src/main/java/app/MainApp.java
 package app;
 
+import app.core.node.AppShutdown;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,5 +17,15 @@ public class MainApp extends Application {
         stage.setScene(scene);
         stage.show();
     }
-    public static void main(String[] args) { launch(args); }
+
+    @Override
+    public void stop() throws Exception {
+        // перед выходом гасим все зарегистрированные фоновые ресурсы (Node-сервера и т.п.)
+        AppShutdown.runAll();
+        super.stop();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

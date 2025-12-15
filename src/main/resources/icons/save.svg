@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="24" height="24"
+     viewBox="0 0 16 16">
+
+    <!-- ВЕРХ: стрелка (transform "запечён" в d) -->
+    <path
+            d="M8.4687 2.02H6.5c-0.7084 0-0.84 0.1585-0.84 0.8445V5.94H3
+               l4.6287 4.7513L12.24 5.94H9.3v-3.08
+               c0-0.6868-0.1268-0.84-0.8313-0.84z"
+            fill="none"
+            stroke="#f50049"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-miterlimit="1"
+    />
+
+    <!-- НИЗ: полка (как было) -->
+    <path
+            d="M3.56 13.36
+               L4.40 15.04
+               H10.84
+               L11.68 13.36"
+            fill="none"
+            stroke="#f50049"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+    />
+
+</svg>

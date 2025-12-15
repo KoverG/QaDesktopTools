@@ -1,0 +1,7 @@
+{
+  "port": 8080,
+  "rejectCode": 1013,
+  "rejectMessage": "Server is not accepting clients",
+  "pingPayload": "ping",
+  "autoClearOutgoingAfterSend": true
+}
